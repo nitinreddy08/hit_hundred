@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Phone, Globe, MessageCircle } from "lucide-react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
 import AddFoodForm from "../components/AddFoodForm";
@@ -236,6 +236,59 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Footer - Professional & Minimal */}
+      <footer className="bg-white/80 backdrop-blur-sm border-t border-gray-200 py-6 md:py-8 mt-8">
+        <div className="container mx-auto px-3">
+          {/* Main Content */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+            {/* Left - Developer */}
+            <div className="text-center md:text-left">
+              <p className="text-sm text-gray-600">
+                Built with 💙 by{" "}
+                <a
+                  href="https://nitinreddy.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-gray-800 hover:text-blue-600 transition-colors"
+                >
+                  Nitin Reddy
+                </a>
+              </p>
+            </div>
+
+            {/* Right - Contact */}
+            <div className="flex items-center gap-2">
+              <a
+                href="tel:+917382118118"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all text-xs"
+                title="Call"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">+91 7382118118</span>
+              </a>
+
+              <a
+                href="https://wa.me/917382118118"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all text-xs"
+                title="WhatsApp"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Chat</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Bottom - Copyright */}
+          <div className="text-center pt-4 border-t border-gray-200">
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} Hit Hundred · All rights reserved
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
