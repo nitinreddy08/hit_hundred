@@ -161,16 +161,19 @@ const ProgressGrid = ({ dailyLog, profile }) => {
   ];
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/20">
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-xl font-bold text-gray-800 flex items-center">
-          <Target className="w-5 h-5 mr-2 text-blue-600" />
-          Progress Tracker
+    <div className="bg-white/80 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-5 shadow-lg border border-white/20">
+      <div className="flex items-center justify-between mb-3 md:mb-5">
+        <h2 className="text-lg md:text-xl font-bold text-gray-800 flex items-center">
+          <Target className="w-4 md:w-5 h-4 md:h-5 mr-2 text-blue-600" />
+          <span className="hidden md:inline">Progress Tracker</span>
+          <span className="md:hidden">Progress</span>
         </h2>
         <div className="text-right">
-          <div className="text-xs text-gray-800">Overall Progress</div>
+          <div className="text-[10px] md:text-xs text-gray-800">
+            Overall Progress
+          </div>
           <div
-            className={`text-2xl font-bold ${getProgressTextColor(
+            className={`text-xl md:text-2xl font-bold ${getProgressTextColor(
               overallProgress
             )}`}
           >
@@ -180,16 +183,16 @@ const ProgressGrid = ({ dailyLog, profile }) => {
       </div>
 
       {/* Overall Progress Bar */}
-      <div className="mb-6">
-        <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+      <div className="mb-4 md:mb-6">
+        <div className="w-full bg-gray-200 rounded-full h-2 md:h-3 mb-2">
           <div
-            className={`h-3 rounded-full progress-bar ${getProgressBarColor(
+            className={`h-2 md:h-3 rounded-full progress-bar ${getProgressBarColor(
               overallProgress
             )}`}
             style={{ width: `${Math.min(overallProgress, 100)}%` }}
           ></div>
         </div>
-        <div className="flex justify-between text-xs text-gray-800">
+        <div className="flex justify-between text-[10px] md:text-xs text-gray-800">
           <span>0%</span>
           <span className="font-semibold">Target: 100%</span>
         </div>

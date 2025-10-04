@@ -139,10 +139,10 @@ export default function Home() {
 
       <HeroSection currentDate={currentDate} />
 
-      <main className="container mx-auto px-3 py-6 animate-fadeIn">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <main className="container mx-auto px-2 md:px-3 py-3 md:py-6 animate-fadeIn">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-6">
           {/* Left Column */}
-          <div className="space-y-5">
+          <div className="space-y-3 md:space-y-5">
             <AddFoodForm
               onAddFood={addFoodToLog}
               favorites={favorites}
@@ -156,7 +156,7 @@ export default function Home() {
           </div>
 
           {/* Right Column */}
-          <div className="space-y-5">
+          <div className="space-y-3 md:space-y-5">
             <ProgressGrid
               dailyLog={dailyLog}
               profile={rdaProfiles[selectedProfile]}

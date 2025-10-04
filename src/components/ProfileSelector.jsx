@@ -50,36 +50,37 @@ const ProfileSelector = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-3 md:p-4">
         {/* Backdrop */}
         <div
           className="fixed inset-0 bg-black/80 transition-opacity"
           onClick={onClose}
         />
 
-        {/* Modal */}
-        <div className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-              <User className="w-6 h-6 mr-2 text-blue-600" />
-              Select Your Profile
+        {/* Modal - 15% smaller: max-w-3xl instead of max-w-4xl */}
+        <div className="relative bg-white rounded-xl md:rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+          {/* Header - 15% smaller padding and text */}
+          <div className="flex items-center justify-between p-3 md:p-5 border-b border-gray-200">
+            <h2 className="text-base md:text-xl font-bold text-gray-800 flex items-center">
+              <User className="w-4 md:w-5 h-4 md:h-5 mr-2 text-blue-600" />
+              <span className="hidden md:inline">Select Your Profile</span>
+              <span className="md:hidden">Profile</span>
             </h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <X className="w-6 h-6 text-gray-500" />
+              <X className="w-5 h-5 text-gray-500" />
             </button>
           </div>
 
-          {/* Content */}
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Content - 15% smaller padding */}
+          <div className="p-3 md:p-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
               {profiles.map((profile) => (
                 <div
                   key={profile.key}
-                  className={`relative border-2 rounded-xl p-6 cursor-pointer transition-all duration-200 ${
+                  className={`relative border-2 rounded-lg md:rounded-xl p-3 md:p-5 cursor-pointer transition-all duration-200 ${
                     selectedProfile === profile.key
                       ? "border-blue-500 bg-blue-50"
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
@@ -90,22 +91,26 @@ const ProfileSelector = ({
                 >
                   {/* Selection Indicator */}
                   {selectedProfile === profile.key && (
-                    <div className="absolute top-4 right-4 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                      <Check className="w-4 h-4 text-white" />
+                    <div className="absolute top-3 right-3 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                      <Check className="w-3 h-3 text-white" />
                     </div>
                   )}
 
                   {/* Profile Header */}
-                  <div className="mb-4">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                        <Activity className="w-6 h-6 text-white" />
+                  <div className="mb-3">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span className="text-2xl">
+                          {profile.gender.toLowerCase() === "male"
+                            ? "👨"
+                            : "👩"}
+                        </span>
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-800">
+                        <h3 className="text-base md:text-lg font-bold text-gray-800">
                           {profile.name}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-xs text-gray-600">
                           {profile.age} • {profile.gender} • {profile.activity}
                         </p>
                       </div>
@@ -113,14 +118,14 @@ const ProfileSelector = ({
                   </div>
 
                   {/* Nutritional Requirements */}
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {/* Macros */}
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                        <span className="text-lg mr-2">🍽️</span>
+                      <h4 className="text-xs font-semibold text-gray-700 mb-1.5 flex items-center">
+                        <span className="text-base mr-1.5">🍽️</span>
                         Macronutrients
                       </h4>
-                      <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="grid grid-cols-2 gap-1.5 text-xs">
                         <div className="flex justify-between">
                           <span className="text-gray-800">Calories:</span>
                           <span className="font-medium text-gray-800">
@@ -160,11 +165,11 @@ const ProfileSelector = ({
 
                     {/* Minerals */}
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                        <span className="text-lg mr-2">⚡</span>
+                      <h4 className="text-xs font-semibold text-gray-700 mb-1.5 flex items-center">
+                        <span className="text-base mr-1.5">⚡</span>
                         Minerals
                       </h4>
-                      <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="grid grid-cols-2 gap-1.5 text-xs">
                         <div className="flex justify-between">
                           <span className="text-gray-800">Calcium:</span>
                           <span className="font-medium text-gray-800">
@@ -202,11 +207,11 @@ const ProfileSelector = ({
 
                     {/* Vitamins */}
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                        <span className="text-lg mr-2">💊</span>
+                      <h4 className="text-xs font-semibold text-gray-700 mb-1.5 flex items-center">
+                        <span className="text-base mr-1.5">💊</span>
                         Vitamins
                       </h4>
-                      <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="grid grid-cols-2 gap-1.5 text-xs">
                         <div className="flex justify-between">
                           <span className="text-gray-800">Vitamin A:</span>
                           <span className="font-medium text-gray-800">
@@ -240,11 +245,11 @@ const ProfileSelector = ({
 
                     {/* Essential Fats */}
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                        <span className="text-lg mr-2">🐟</span>
+                      <h4 className="text-xs font-semibold text-gray-700 mb-1.5 flex items-center">
+                        <span className="text-base mr-1.5">🐟</span>
                         Essential Fats
                       </h4>
-                      <div className="text-sm">
+                      <div className="text-xs">
                         <div className="flex justify-between">
                           <span className="text-gray-800">Omega-3:</span>
                           <span className="font-medium text-gray-800">

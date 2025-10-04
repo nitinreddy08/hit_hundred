@@ -152,13 +152,13 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/20">
-      <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
-        <Plus className="w-5 h-5 mr-2 text-blue-600" />
+    <div className="bg-white/80 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-5 shadow-lg border border-white/20">
+      <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-5 flex items-center">
+        <Plus className="w-4 md:w-5 h-4 md:h-5 mr-2 text-blue-600" />
         Add Food
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5">
         {/* Food Search */}
         <div className="relative">
           <label className="block text-xs font-medium text-black mb-1.5">
@@ -352,14 +352,16 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                 key={meal.value}
                 type="button"
                 onClick={() => setMealType(meal.value)}
-                className={`flex items-center justify-center space-x-1.5 p-2.5 rounded-xl border transition-all duration-200 ${
+                className={`flex items-center justify-center space-x-1 md:space-x-1.5 p-2 md:p-2.5 rounded-lg md:rounded-xl border transition-all duration-200 ${
                   mealType === meal.value
                     ? "bg-blue-500 text-white border-blue-500"
                     : "bg-white text-black border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <span className="text-base">{meal.emoji}</span>
-                <span className="font-medium text-sm">{meal.label}</span>
+                <span className="text-sm md:text-base">{meal.emoji}</span>
+                <span className="font-medium text-xs md:text-sm">
+                  {meal.label}
+                </span>
               </button>
             ))}
           </div>
