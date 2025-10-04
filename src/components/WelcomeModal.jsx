@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, Target, TrendingUp, Heart, Star, ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 const WelcomeModal = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -69,14 +70,12 @@ const WelcomeModal = ({ isOpen, onClose }) => {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <div className="flex items-center space-x-3">
-              <img
+              <Image
                 src="/logo.svg"
                 alt="Hit Hundred Logo"
+                width={32}
+                height={32}
                 className="h-8 w-auto"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/logo.png";
-                }}
               />
               <h1 className="text-xl font-bold text-gray-800">Hit Hundred</h1>
             </div>

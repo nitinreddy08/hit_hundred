@@ -152,20 +152,20 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-        <Plus className="w-6 h-6 mr-2 text-blue-600" />
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/20">
+      <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+        <Plus className="w-5 h-5 mr-2 text-blue-600" />
         Add Food
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* Food Search */}
         <div className="relative">
-          <label className="block text-sm font-medium text-black mb-2">
+          <label className="block text-xs font-medium text-black mb-1.5">
             Search Food
           </label>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black w-5 h-5" />
+            <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-black w-4 h-4" />
             <input
               ref={searchRef}
               type="text"
@@ -174,7 +174,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
               onKeyDown={handleKeyDown}
               onFocus={() => setShowDropdown(true)}
               placeholder="Search for foods..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+              className="w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black text-sm"
             />
             {searchQuery && (
               <button
@@ -184,9 +184,9 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                   setSelectedFood(null);
                   setShowDropdown(false);
                 }}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>
@@ -195,38 +195,40 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
           {showDropdown && searchResults.length > 0 && (
             <div
               ref={dropdownRef}
-              className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto"
+              className="absolute z-10 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg max-h-52 overflow-y-auto"
             >
               {searchResults.map((food, index) => (
                 <div
                   key={food.name}
-                  className={`flex items-center justify-between p-3 hover:bg-gray-50 cursor-pointer ${
+                  className={`flex items-center justify-between p-2.5 hover:bg-gray-50 cursor-pointer ${
                     index === selectedIndex ? "bg-blue-50" : ""
                   } ${index === 0 ? "rounded-t-xl" : ""} ${
                     index === searchResults.length - 1 ? "rounded-b-xl" : ""
                   }`}
                   onClick={() => handleFoodSelect(food)}
                 >
-                  <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{food.emoji}</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">{food.emoji}</span>
                     <div>
-                      <div className="font-medium text-black">{food.name}</div>
-                      <div className="text-sm text-black">{food.category}</div>
+                      <div className="font-medium text-black text-sm">
+                        {food.name}
+                      </div>
+                      <div className="text-xs text-black">{food.category}</div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1">
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         onToggleFavorite(food);
                       }}
-                      className="p-1 hover:bg-gray-200 rounded-full transition-colors"
+                      className="p-0.5 hover:bg-gray-200 rounded-full transition-colors"
                     >
                       {isFavorite(food) ? (
-                        <Heart className="w-4 h-4 text-red-500 fill-current" />
+                        <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
                       ) : (
-                        <Heart className="w-4 h-4 text-gray-400" />
+                        <Heart className="w-3.5 h-3.5 text-gray-400" />
                       )}
                     </button>
                   </div>
@@ -238,15 +240,15 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
         {/* Selected Food Display */}
         {selectedFood && (
-          <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <div className="bg-blue-50 rounded-xl p-3 border border-blue-200">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <span className="text-2xl">{selectedFood.emoji}</span>
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">{selectedFood.emoji}</span>
                 <div>
-                  <div className="font-medium text-black">
+                  <div className="font-medium text-black text-sm">
                     {selectedFood.name}
                   </div>
-                  <div className="text-sm text-black">
+                  <div className="text-xs text-black">
                     {selectedFood.category} •{" "}
                     {selectedFood.nutrition.calories.toFixed(1)} cal/g
                   </div>
@@ -260,7 +262,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                 }}
                 className="text-gray-400 hover:text-gray-600"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -268,7 +270,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
         {/* Quantity Input */}
         <div>
-          <label className="block text-sm font-medium text-black mb-2">
+          <label className="block text-xs font-medium text-black mb-1.5">
             Quantity{selectedFood && ` (${unitInfo.label})`}
           </label>
           <div className="flex items-center space-x-2">
@@ -298,23 +300,25 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
               }}
               min="1"
               max="10000"
-              className="text-black flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="text-black flex-1 px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed text-sm"
             />
             {selectedFood && (
-              <span className="text-black font-medium">{unitInfo.unit}</span>
+              <span className="text-black font-medium text-sm">
+                {unitInfo.unit}
+              </span>
             )}
           </div>
 
           {/* Quick Serving Sizes */}
           {selectedFood && (
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
               <button
                 type="button"
                 onClick={() => {
                   setQuantity("");
                   document.querySelector('input[type="number"]')?.focus();
                 }}
-                className="px-3 py-1 text-sm rounded-lg border border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors font-medium"
+                className="px-2.5 py-1 text-xs rounded-lg border border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors font-medium"
               >
                 Custom
               </button>
@@ -323,7 +327,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                   key={size}
                   type="button"
                   onClick={() => setQuantity(size)}
-                  className={`px-3 py-1 text-sm rounded-lg border transition-colors ${
+                  className={`px-2.5 py-1 text-xs rounded-lg border transition-colors ${
                     quantity === size
                       ? "bg-blue-500 text-white border-blue-500"
                       : "bg-white text-black border-gray-300 hover:bg-gray-50"
@@ -339,23 +343,23 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
         {/* Meal Type Selection */}
         <div>
-          <label className="block text-sm font-medium text-black mb-2">
+          <label className="block text-xs font-medium text-black mb-1.5">
             Meal Type
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1.5">
             {mealTypes.map((meal) => (
               <button
                 key={meal.value}
                 type="button"
                 onClick={() => setMealType(meal.value)}
-                className={`flex items-center justify-center space-x-2 p-3 rounded-xl border transition-all duration-200 ${
+                className={`flex items-center justify-center space-x-1.5 p-2.5 rounded-xl border transition-all duration-200 ${
                   mealType === meal.value
                     ? "bg-blue-500 text-white border-blue-500"
                     : "bg-white text-black border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <span className="text-lg">{meal.emoji}</span>
-                <span className="font-medium">{meal.label}</span>
+                <span className="text-base">{meal.emoji}</span>
+                <span className="font-medium text-sm">{meal.label}</span>
               </button>
             ))}
           </div>
@@ -365,7 +369,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
         <button
           type="submit"
           disabled={!selectedFood || quantity <= 0}
-          className="w-full py-4 btn-premium text-lg disabled:opacity-50 disabled:cursor-not-allowed ripple"
+          className="w-full py-3 btn-premium text-base disabled:opacity-50 disabled:cursor-not-allowed ripple"
         >
           Add to {mealTypes.find((m) => m.value === mealType)?.label}
         </button>
@@ -373,20 +377,20 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
       {/* Favorites Section */}
       {favorites.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <h3 className="text-lg font-semibold text-black mb-3 flex items-center">
-            <Star className="w-5 h-5 mr-2 text-yellow-500" />
+        <div className="mt-5 pt-5 border-t border-gray-200">
+          <h3 className="text-base font-semibold text-black mb-2.5 flex items-center">
+            <Star className="w-4 h-4 mr-1.5 text-yellow-500" />
             Favorites
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {favorites.slice(0, 5).map((food) => (
               <button
                 key={food.name}
                 onClick={() => handleFoodSelect(food)}
-                className="flex items-center space-x-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
-                <span className="text-lg">{food.emoji}</span>
-                <span className="text-sm font-medium text-black">
+                <span className="text-base">{food.emoji}</span>
+                <span className="text-xs font-medium text-black">
                   {food.name}
                 </span>
               </button>

@@ -10,7 +10,12 @@ import { calculateNutrition } from "../data/foodDB";
 import { calculateRdaPercentage, getProgressColor } from "../data/rdaProfiles";
 
 const ProgressGrid = ({ dailyLog, profile }) => {
-  const [activeTab, setActiveTab] = useState("macros");
+  const [openDropdowns, setOpenDropdowns] = useState({
+    macros: true, // Macronutrients open by default
+    minerals: false,
+    vitamins: false,
+    fats: false,
+  });
 
   // Calculate total nutrition from daily log
   const calculateTotalNutrition = () => {
@@ -60,6 +65,13 @@ const ProgressGrid = ({ dailyLog, profile }) => {
     return "text-red-600";
   };
 
+  const toggleDropdown = (categoryKey) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [categoryKey]: !prev[categoryKey],
+    }));
+  };
+
   const renderNutrientCard = (category, nutrient, label, unit, icon) => {
     const consumed = totalNutrition[nutrient] || 0;
     const required = profile[category][nutrient];
@@ -69,22 +81,22 @@ const ProgressGrid = ({ dailyLog, profile }) => {
     return (
       <div
         key={nutrient}
-        className="bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-white/40"
+        className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-white/40"
       >
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-1.5">
           <div className="flex items-center space-x-2">
-            <span className="text-lg">{icon}</span>
-            <span className="font-medium text-gray-800">{label}</span>
+            <span className="text-base">{icon}</span>
+            <span className="font-medium text-gray-800 text-sm">{label}</span>
           </div>
           <div
-            className={`px-2 py-1 rounded-full text-xs font-semibold ${colorClass}`}
+            className={`px-1.5 py-0.5 rounded-full text-xs font-semibold ${colorClass}`}
           >
             {percentage.toFixed(0)}%
           </div>
         </div>
 
-        <div className="mb-2">
-          <div className="flex justify-between text-sm text-gray-800 mb-1">
+        <div className="mb-1.5">
+          <div className="flex justify-between text-xs text-gray-800 mb-1">
             <span>
               {consumed.toFixed(1)} {unit}
             </span>
@@ -92,9 +104,9 @@ const ProgressGrid = ({ dailyLog, profile }) => {
               {required} {unit}
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 rounded-full h-1.5">
             <div
-              className={`h-2 rounded-full progress-bar ${getProgressBarColor(
+              className={`h-1.5 rounded-full progress-bar ${getProgressBarColor(
                 percentage
               )}`}
               style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -149,16 +161,16 @@ const ProgressGrid = ({ dailyLog, profile }) => {
   ];
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-          <Target className="w-6 h-6 mr-2 text-blue-600" />
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border border-white/20">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-xl font-bold text-gray-800 flex items-center">
+          <Target className="w-5 h-5 mr-2 text-blue-600" />
           Progress Tracker
         </h2>
         <div className="text-right">
-          <div className="text-sm text-gray-800">Overall Progress</div>
+          <div className="text-xs text-gray-800">Overall Progress</div>
           <div
-            className={`text-3xl font-bold ${getProgressTextColor(
+            className={`text-2xl font-bold ${getProgressTextColor(
               overallProgress
             )}`}
           >
@@ -168,72 +180,76 @@ const ProgressGrid = ({ dailyLog, profile }) => {
       </div>
 
       {/* Overall Progress Bar */}
-      <div className="mb-8">
-        <div className="w-full bg-gray-200 rounded-full h-4 mb-2">
+      <div className="mb-6">
+        <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
           <div
-            className={`h-4 rounded-full progress-bar ${getProgressBarColor(
+            className={`h-3 rounded-full progress-bar ${getProgressBarColor(
               overallProgress
             )}`}
             style={{ width: `${Math.min(overallProgress, 100)}%` }}
           ></div>
         </div>
-        <div className="flex justify-between text-sm text-gray-800">
+        <div className="flex justify-between text-xs text-gray-800">
           <span>0%</span>
           <span className="font-semibold">Target: 100%</span>
         </div>
       </div>
 
-      {/* Nutrient Category Tabs */}
-      <div className="mb-6">
-        <div className="flex gap-2 overflow-x-auto">
-          {categories.map((category) => (
+      {/* Nutrient Category Dropdowns */}
+      <div className="space-y-3">
+        {categories.map((category) => (
+          <div
+            key={category.key}
+            className="bg-white rounded-xl border border-gray-200 overflow-hidden"
+          >
+            {/* Dropdown Header */}
             <button
-              key={category.key}
-              onClick={() => setActiveTab(category.key)}
-              className={`flex items-center space-x-1 px-4 py-2.5 rounded-lg font-semibold text-base transition-all duration-200 whitespace-nowrap ${
-                activeTab === category.key
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+              onClick={() => toggleDropdown(category.key)}
+              className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 transition-colors"
             >
-              <span>{category.icon}</span>
-              <span>{category.title}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Active Category Content */}
-      <div className="bg-white rounded-xl p-4 border border-gray-200">
-        {categories
-          .filter((cat) => cat.key === activeTab)
-          .map((category) => (
-            <div key={category.key}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {category.nutrients.map((nutrient) =>
-                  renderNutrientCard(
-                    category.key,
-                    nutrient.key,
-                    nutrient.label,
-                    nutrient.unit,
-                    nutrient.icon
-                  )
-                )}
+              <div className="flex items-center space-x-2">
+                <span className="text-xl">{category.icon}</span>
+                <span className="text-base font-semibold text-gray-800">
+                  {category.title}
+                </span>
               </div>
-            </div>
-          ))}
+              {openDropdowns[category.key] ? (
+                <ChevronUp className="w-4 h-4 text-gray-500" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-gray-500" />
+              )}
+            </button>
+
+            {/* Dropdown Content */}
+            {openDropdowns[category.key] && (
+              <div className="px-3 pb-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {category.nutrients.map((nutrient) =>
+                    renderNutrientCard(
+                      category.key,
+                      nutrient.key,
+                      nutrient.label,
+                      nutrient.unit,
+                      nutrient.icon
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Achievement Badge */}
       {overallProgress >= 100 && (
-        <div className="mt-6 p-4 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-200 rounded-xl">
-          <div className="flex items-center space-x-3">
-            <Award className="w-8 h-8 text-yellow-600" />
+        <div className="mt-5 p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-200 rounded-xl">
+          <div className="flex items-center space-x-2">
+            <Award className="w-6 h-6 text-yellow-600" />
             <div>
-              <div className="font-semibold text-yellow-800">
+              <div className="font-semibold text-yellow-800 text-sm">
                 🎉 Congratulations!
               </div>
-              <div className="text-sm text-yellow-700">
+              <div className="text-xs text-yellow-700">
                 You've hit 100% of your daily nutritional targets!
               </div>
             </div>
@@ -243,12 +259,14 @@ const ProgressGrid = ({ dailyLog, profile }) => {
 
       {/* Motivation Message */}
       {overallProgress < 100 && (
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-          <div className="flex items-center space-x-3">
-            <TrendingUp className="w-6 h-6 text-blue-600" />
+        <div className="mt-5 p-3 bg-blue-50 border border-blue-200 rounded-xl">
+          <div className="flex items-center space-x-2">
+            <TrendingUp className="w-5 h-5 text-blue-600" />
             <div>
-              <div className="font-semibold text-blue-800">Keep going!</div>
-              <div className="text-sm text-blue-700">
+              <div className="font-semibold text-blue-800 text-sm">
+                Keep going!
+              </div>
+              <div className="text-xs text-blue-700">
                 You're {overallProgress.toFixed(0)}% of the way to hitting 100%
                 of your RDA targets.
               </div>

@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import { Download, Share2, X, Image as ImageIcon } from "lucide-react";
+import Image from "next/image";
+// import downloadIcon from "../images/download.png";
+import logoImage from "../images/logo.png";
 
 const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
   const cardRef = useRef(null);
@@ -131,7 +134,7 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
     if (overallProgress >= 90) return "🔥";
     if (overallProgress >= 70) return "💪";
     if (overallProgress >= 50) return "✨";
-    return "🌱";
+    return "logo"; // Special case for logo
   };
 
   const getProgressMessage = () => {
@@ -145,7 +148,7 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/90 backdrop-blur-sm">
       {/* Modal Container */}
       <div className="flex min-h-full items-center justify-center p-6">
-        <div className="relative bg-gradient-to-br from-slate-900 to-black rounded-3xl shadow-2xl max-w-6xl mx-auto p-6">
+        <div className="relative bg-gradient-to-br from-slate-900 to-black rounded-3xl shadow-2xl max-w-5xl mx-auto p-5">
           {/* Close Button */}
           <button
             onClick={onClose}
@@ -155,21 +158,21 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
           </button>
 
           {/* Title */}
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold text-white mb-1">
+          <div className="mb-3">
+            <h2 className="text-xl font-bold text-white mb-1">
               Share Your Progress
             </h2>
-            <p className="text-sm text-gray-400">
+            <p className="text-xs text-gray-400">
               Download or share to social media
             </p>
           </div>
 
           {/* Main Content - Side by Side Layout */}
-          <div className="flex gap-6 items-start">
+          <div className="flex gap-5 items-start">
             {/* Card Preview - Left Side */}
             <div
               className="rounded-2xl overflow-hidden shadow-2xl flex-shrink-0"
-              style={{ width: "475px", height: "594px" }}
+              style={{ width: "380px", height: "475px" }}
             >
               {/* Shareable Card - Nike/Adidas/Strava Style */}
               <div
@@ -179,7 +182,7 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                   width: "1080px",
                   height: "1350px",
                   transformOrigin: "top left",
-                  transform: "scale(0.44)",
+                  transform: "scale(0.35)",
                 }}
               >
                 {/* Custom Background Image or Gradient */}
@@ -228,7 +231,36 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-6xl mb-2">{getProgressEmoji()}</div>
+                      <div className="text-6xl mb-2">
+                        {/* Debug: Always show logo for testing */}
+                        <div className="h-16 w-16 flex items-center justify-center overflow-hidden">
+                          <Image
+                            src={logoImage}
+                            alt="Hit Hundred Logo"
+                            width={80}
+                            height={80}
+                            className="brightness-0 invert object-contain"
+                            style={{
+                              objectFit: "contain",
+                              maxWidth: "100%",
+                              maxHeight: "100%",
+                            }}
+                          />
+                        </div>
+                        {/* Original conditional logic - uncomment when logo is working */}
+                        {/* {getProgressEmoji() === "logo" ? (
+                          <Image
+                            src={logoImage}
+                            alt="Hit Hundred Logo"
+                            width={64}
+                            height={64}
+                            className="h-16 w-auto brightness-0 invert object-contain"
+                            style={{ objectFit: 'contain' }}
+                          />
+                        ) : (
+                          getProgressEmoji()
+                        )} */}
+                      </div>
                     </div>
                   </div>
 
@@ -370,17 +402,25 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                   {/* Footer - Brand & Date */}
                   <div className="flex items-end justify-between pt-8 border-t border-gray-800">
                     <div className="flex flex-col items-start">
-                      <img
-                        src="/logo.svg"
-                        alt="Hit Hundred"
-                        className="h-20 w-auto mb-3 brightness-0 invert"
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                      <h2 className="text-5xl font-black text-white mb-2 tracking-tight">
-                        HIT HUNDRED
-                      </h2>
+                      <div className="flex items-center mb-3">
+                        <div className="h-16 w-16 flex items-center justify-center overflow-hidden mr-3">
+                          <Image
+                            src={logoImage}
+                            alt="Hit Hundred"
+                            width={64}
+                            height={64}
+                            className="brightness-0 invert object-contain"
+                            style={{
+                              objectFit: "contain",
+                              maxWidth: "100%",
+                              maxHeight: "100%",
+                            }}
+                          />
+                        </div>
+                        <h2 className="text-5xl font-black text-white tracking-tight">
+                          HIT HUNDRED
+                        </h2>
+                      </div>
                       <p className="text-xl text-gray-500 font-semibold">
                         {dailyLog?.length || 0} FOODS LOGGED
                       </p>
@@ -399,9 +439,9 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
             </div>
 
             {/* Action Buttons - Right Side */}
-            <div className="flex flex-col gap-3 min-w-[280px]">
-              <div className="mb-2">
-                <h3 className="text-lg font-semibold text-white mb-1">
+            <div className="flex flex-col gap-2.5 min-w-[224px]">
+              <div className="mb-1.5">
+                <h3 className="text-base font-semibold text-white mb-1">
                   Customize & Share
                 </h3>
                 <p className="text-xs text-gray-400">
@@ -421,10 +461,10 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isGenerating}
-                className="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-xl transition-all duration-200 disabled:opacity-50 border border-purple-500/40"
+                className="flex items-center justify-center space-x-1.5 px-3 py-2.5 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-xl transition-all duration-200 disabled:opacity-50 border border-purple-500/40"
               >
-                <ImageIcon className="w-4 h-4" />
-                <span className="font-semibold text-sm">
+                <ImageIcon className="w-3.5 h-3.5" />
+                <span className="font-semibold text-xs">
                   {customBgImage ? "Change Background" : "Add Your Photo"}
                 </span>
               </button>
@@ -433,39 +473,46 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                 <button
                   onClick={() => setCustomBgImage(null)}
                   disabled={isGenerating}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl transition-all duration-200 disabled:opacity-50 border border-red-500/40"
+                  className="flex items-center justify-center space-x-1.5 px-3 py-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl transition-all duration-200 disabled:opacity-50 border border-red-500/40"
                 >
-                  <X className="w-4 h-4" />
-                  <span className="font-semibold text-sm">
+                  <X className="w-3.5 h-3.5" />
+                  <span className="font-semibold text-xs">
                     Remove Background
                   </span>
                 </button>
               )}
 
-              <div className="border-t border-gray-700 my-2"></div>
+              <div className="border-t border-gray-700 my-1.5"></div>
 
               {/* Download Button */}
               <button
                 onClick={handleDownload}
                 disabled={isGenerating}
-                className="flex items-center justify-center space-x-2 px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 disabled:opacity-50 border border-white/20"
+                className="flex items-center justify-center space-x-1.5 px-3 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 disabled:opacity-50 border border-white/20"
               >
-                <Download className="w-5 h-5" />
-                <span className="font-semibold">Download Image</span>
+                {/* <Image
+                  src={downloadIcon}
+                  alt="Download"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4"
+                /> */}
+                <Download className="w-4 h-4 hidden" />
+                <span className="font-semibold text-sm">Download Image</span>
               </button>
 
               {/* Share Button */}
               <button
                 onClick={handleShare}
                 disabled={isGenerating}
-                className="flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl transition-all duration-200 disabled:opacity-50 shadow-lg"
+                className="flex items-center justify-center space-x-1.5 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl transition-all duration-200 disabled:opacity-50 shadow-lg"
               >
-                <Share2 className="w-5 h-5" />
-                <span className="font-semibold">Share to Social</span>
+                <Share2 className="w-4 h-4" />
+                <span className="font-semibold text-sm">Share to Social</span>
               </button>
 
               {isGenerating && (
-                <div className="mt-2 text-center text-xs text-gray-400 animate-pulse">
+                <div className="mt-1.5 text-center text-xs text-gray-400 animate-pulse">
                   Generating high-quality image...
                 </div>
               )}
