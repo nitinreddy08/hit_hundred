@@ -3,7 +3,6 @@ import { toPng } from "html-to-image";
 import { Download, Share2, X, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 // import downloadIcon from "../images/download.png";
-import logoImage from "../images/logo.png";
 
 const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
   const cardRef = useRef(null);
@@ -233,20 +232,13 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                     <div className="text-right">
                       <div className="text-6xl mb-2">
                         {/* Debug: Always show logo for testing */}
-                        <div className="h-16 w-16 flex items-center justify-center overflow-hidden">
-                          <Image
-                            src={logoImage}
-                            alt="Hit Hundred Logo"
-                            width={80}
-                            height={80}
-                            className="brightness-0 invert object-contain"
-                            style={{
-                              objectFit: "contain",
-                              maxWidth: "100%",
-                              maxHeight: "100%",
-                            }}
-                          />
-                        </div>
+                        <Image
+                          src="/logo.svg"
+                          alt="Hit Hundred Logo"
+                          width={96}
+                          height={96}
+                          className="h-24 w-auto"
+                        />
                         {/* Original conditional logic - uncomment when logo is working */}
                         {/* {getProgressEmoji() === "logo" ? (
                           <Image
@@ -403,20 +395,13 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                   <div className="flex items-end justify-between pt-8 border-t border-gray-800">
                     <div className="flex flex-col items-start">
                       <div className="flex items-center mb-3">
-                        <div className="h-16 w-16 flex items-center justify-center overflow-hidden mr-3">
-                          <Image
-                            src={logoImage}
-                            alt="Hit Hundred"
-                            width={64}
-                            height={64}
-                            className="brightness-0 invert object-contain"
-                            style={{
-                              objectFit: "contain",
-                              maxWidth: "100%",
-                              maxHeight: "100%",
-                            }}
-                          />
-                        </div>
+                        <Image
+                          src="/logo.svg"
+                          alt="Hit Hundred Logo"
+                          width={32}
+                          height={32}
+                          className="h-8 w-auto mr-3"
+                        />
                         <h2 className="text-5xl font-black text-white tracking-tight">
                           HIT HUNDRED
                         </h2>
