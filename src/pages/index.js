@@ -211,8 +211,9 @@ export default function Home() {
                   </h3>
                 </div>
                 <p className="text-gray-600">
-                  Are you sure you want to reset today's food log? This action
-                  cannot be undone and will remove all logged foods for today.
+                  Are you sure you want to reset today&apos;s food log? This
+                  action cannot be undone and will remove all logged foods for
+                  today.
                 </p>
               </div>
 
