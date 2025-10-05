@@ -137,7 +137,7 @@ export default function Home() {
         selectedProfile={rdaProfiles[selectedProfile]?.name}
       />
 
-      <HeroSection currentDate={currentDate} />
+      <HeroSection currentDate={currentDate} onShareCard={() => setShowShareCard(true)} />
 
       <main className="container mx-auto px-2 md:px-3 py-3 md:py-6 animate-fadeIn">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-6">
