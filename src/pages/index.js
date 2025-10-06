@@ -469,6 +469,17 @@ export default function Home() {
               </a>
 
               <a
+                href="https://nitinreddy.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all text-xs"
+                title="Website"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Website</span>
+              </a>
+
+              <a
                 href="https://wa.me/917382118118"
                 target="_blank"
                 rel="noopener noreferrer"

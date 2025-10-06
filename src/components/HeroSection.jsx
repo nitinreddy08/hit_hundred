@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Calendar, Share2 } from "lucide-react";
+import { Calendar, Share2, Dumbbell } from "lucide-react";
 
 const HeroSection = ({ currentDate, onShareCard }) => {
   const [scrollIndex, setScrollIndex] = useState(0);
   const shareOptions = ["Share Card", "Download"];
+  const trainingOptions = ["TheUltimate45", "Training App"];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,29 +35,55 @@ const HeroSection = ({ currentDate, onShareCard }) => {
             </span>
           </div>
 
-          {/* Share Button with Scrolling Text */}
-          <button
-            onClick={onShareCard}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 active:scale-95 transition-all duration-200 shadow-sm hover:shadow-md flex-shrink-0"
-            aria-label="Share progress"
-          >
-            <Share2 className="w-3.5 h-3.5 flex-shrink-0" />
-            <div className="overflow-hidden h-4 w-20">
-              <div
-                className="transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateY(-${scrollIndex * 1}rem)` }}
-              >
-                {shareOptions.map((option, index) => (
-                  <div
-                    key={index}
-                    className="text-xs font-medium h-4 flex items-center justify-center whitespace-nowrap"
-                  >
-                    {option}
-                  </div>
-                ))}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <a
+              href="https://theultimate45.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-lg shadow-md active:scale-95 transition-all ring-1 ring-red-500/30 bg-red-500/15 text-red-700 backdrop-blur border border-red-500/30 hover:bg-red-500/20"
+              aria-label="Open Training App"
+            >
+              <Dumbbell className="w-3.5 h-3.5" />
+              <div className="overflow-hidden h-4 w-24">
+                <div
+                  className="transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateY(-${scrollIndex * 1}rem)` }}
+                >
+                  {trainingOptions.map((label, idx) => (
+                    <div
+                      key={idx}
+                      className="text-[11px] font-semibold h-4 flex items-center whitespace-nowrap"
+                    >
+                      {label}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </button>
+            </a>
+            {/* Share Button with Scrolling Text */}
+            <button
+              onClick={onShareCard}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 active:scale-95 transition-all duration-200 shadow-sm hover:shadow-md flex-shrink-0"
+              aria-label="Share progress"
+            >
+              <Share2 className="w-3.5 h-3.5 flex-shrink-0" />
+              <div className="overflow-hidden h-4 w-20">
+                <div
+                  className="transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateY(-${scrollIndex * 1}rem)` }}
+                >
+                  {shareOptions.map((option, index) => (
+                    <div
+                      key={index}
+                      className="text-xs font-medium h-4 flex items-center justify-center whitespace-nowrap"
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Desktop View */}
@@ -69,10 +96,34 @@ const HeroSection = ({ currentDate, onShareCard }) => {
             </span>
           </div>
 
-          {/* Status */}
-          <div className="flex items-center space-x-1.5 text-gray-700">
+          {/* Status + Training App */}
+          <div className="flex items-center space-x-2 text-gray-700">
             <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-xs">Hit 100% of your daily RDA targets</span>
+            <a
+              href="https://theultimate45.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-lg shadow-md active:scale-95 transition-all ring-1 ring-red-500/30 bg-red-500/15 text-red-700 backdrop-blur border border-red-500/30 hover:bg-red-500/20 ml-3"
+              aria-label="Open Training App"
+            >
+              <Dumbbell className="w-3.5 h-3.5" />
+              <div className="overflow-hidden h-4 w-24">
+                <div
+                  className="transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateY(-${scrollIndex * 1}rem)` }}
+                >
+                  {trainingOptions.map((label, idx) => (
+                    <div
+                      key={idx}
+                      className="text-[11px] font-semibold h-4 flex items-center whitespace-nowrap"
+                    >
+                      {label}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </div>
