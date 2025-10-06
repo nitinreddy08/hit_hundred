@@ -27,23 +27,27 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
 
   if (!isOpen) return null;
 
-  // Calculate overall progress
+  // Calculate overall progress across calories, protein, carbs, and fat
   const calculateProgress = () => {
-    if (!profile || !totalNutrition) return 0;
+    if (!profile || !profile.macros || !totalNutrition) return 0;
 
-    const macroProgress = [
-      (totalNutrition.calories / profile.macros.calories) * 100,
-      (totalNutrition.protein / profile.macros.protein) * 100,
-      (totalNutrition.carbs / profile.macros.carbs) * 100,
-      (totalNutrition.fat / profile.macros.fat) * 100,
-    ];
+    const macroKeys = ["calories", "protein", "carbs", "fat"];
 
-    return Math.min(
-      Math.round(
-        macroProgress.reduce((a, b) => a + b, 0) / macroProgress.length
-      ),
-      100
-    );
+    const ratios = macroKeys
+      .map((key) => {
+        const goal = Number(profile.macros?.[key]) || 0;
+        const value = Number(totalNutrition?.[key]) || 0;
+        if (goal <= 0) return null; // skip missing/invalid goals
+        const pct = (value / goal) * 100;
+        if (!isFinite(pct)) return 0;
+        return Math.max(0, Math.min(100, pct));
+      })
+      .filter((v) => v !== null);
+
+    if (ratios.length === 0) return 0;
+
+    const avg = ratios.reduce((sum, v) => sum + v, 0) / ratios.length;
+    return Math.min(100, Math.round(avg));
   };
 
   const overallProgress = calculateProgress();
