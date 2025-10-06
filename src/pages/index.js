@@ -1,11 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
-import { AlertTriangle, Phone, Globe, MessageCircle } from "lucide-react";
+import {
+  AlertTriangle,
+  Phone,
+  Globe,
+  MessageCircle,
+  Clock,
+} from "lucide-react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
 import AddFoodForm from "../components/AddFoodForm";
 import FoodList from "../components/FoodList";
 import ProgressGrid from "../components/ProgressGrid";
+import MealSection from "../components/MealSection";
 import ProfileSelector from "../components/ProfileSelector";
 import WelcomeModal from "../components/WelcomeModal";
 import ShareCard from "../components/ShareCard";
@@ -31,6 +38,10 @@ export default function Home() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
+
+  // Refs to columns (for future use if we switch back to measuring)
+  const leftColumnRef = useRef(null);
+  const rightColumnRef = useRef(null);
 
   // Load data from localStorage on component mount
   useEffect(() => {
@@ -70,7 +81,6 @@ export default function Home() {
       food: food,
       quantity: quantity,
       mealType: mealType,
-      timestamp: new Date().toISOString(),
     };
     setDailyLog((prev) => [...prev, newEntry]);
   };
@@ -126,6 +136,99 @@ export default function Home() {
     }, {});
   };
 
+  // Meal types for organizing food log
+  const mealTypes = [
+    {
+      value: "breakfast",
+      label: "Breakfast",
+      emoji: "🍳",
+      color: "meal-yellow",
+    },
+    {
+      value: "lunch",
+      label: "Lunch",
+      emoji: "🍱",
+      color: "meal-green",
+    },
+    {
+      value: "dinner",
+      label: "Dinner",
+      emoji: "🍽️",
+      color: "meal-blue",
+    },
+    {
+      value: "snack",
+      label: "Snack",
+      emoji: "🍪",
+      color: "meal-purple",
+    },
+  ];
+
+  // Group daily log by meal type
+  const groupByMealType = () => {
+    const grouped = {};
+    mealTypes.forEach((meal) => {
+      grouped[meal.value] = dailyLog.filter(
+        (entry) => entry.mealType === meal.value
+      );
+    });
+    return grouped;
+  };
+
+  const groupedLog = groupByMealType();
+
+  // Calculate total calories and protein for summary
+  const totalCalories = dailyLog
+    .reduce(
+      (sum, entry) =>
+        sum + calculateNutrition(entry.food, entry.quantity).calories,
+      0
+    )
+    .toFixed(0);
+
+  const totalProtein = dailyLog
+    .reduce(
+      (sum, entry) =>
+        sum + calculateNutrition(entry.food, entry.quantity).protein,
+      0
+    )
+    .toFixed(1);
+
+  // Deterministic, professional packing based on estimated heights
+  // Keeps all items on the left until it actually becomes taller than the right
+  const estimateMealHeight = (entriesLength) => {
+    const header = 64; // meal header height
+    const entry = 64; // per-entry card height
+    const padding = 24; // inner spacing
+    return header + entriesLength * entry + padding;
+  };
+
+  const estimateAddFormHeight = 220; // typical height of AddFoodForm
+  const estimateSummaryHeight = dailyLog.length > 0 ? 72 : 0;
+  const estimateProgressHeight = 420; // typical ProgressGrid on desktop
+
+  const mealSectionsWithData = mealTypes.filter(
+    (meal) => groupedLog[meal.value].length > 0
+  );
+
+  let leftAccum = estimateAddFormHeight + estimateSummaryHeight;
+  let rightAccum = estimateProgressHeight;
+  const leftMealSections = [];
+  const rightMealSections = [];
+
+  mealSectionsWithData.forEach((meal) => {
+    const entries = groupedLog[meal.value];
+    const est = estimateMealHeight(entries.length);
+    // Only move to right when left is taller by a cushion
+    if (leftAccum <= rightAccum + 150) {
+      leftMealSections.push(meal);
+      leftAccum += est;
+    } else {
+      rightMealSections.push(meal);
+      rightAccum += est;
+    }
+  });
+
   return (
     <div
       className={`${geistSans.className} ${geistMono.className} min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100`}
@@ -137,30 +240,127 @@ export default function Home() {
         selectedProfile={rdaProfiles[selectedProfile]?.name}
       />
 
-      <HeroSection currentDate={currentDate} onShareCard={() => setShowShareCard(true)} />
+      <HeroSection
+        currentDate={currentDate}
+        onShareCard={() => setShowShareCard(true)}
+      />
 
       <main className="container mx-auto px-2 md:px-3 py-3 md:py-6 animate-fadeIn">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-6">
+        {/* Mobile View - Keep original layout */}
+        <div className="lg:hidden space-y-3 md:space-y-5">
+          <AddFoodForm
+            onAddFood={addFoodToLog}
+            favorites={favorites}
+            onToggleFavorite={toggleFavorite}
+          />
+          <FoodList
+            dailyLog={dailyLog}
+            onUpdateQuantity={updateFoodQuantity}
+            onRemoveFood={removeFoodFromLog}
+          />
+          <ProgressGrid
+            dailyLog={dailyLog}
+            profile={rdaProfiles[selectedProfile]}
+          />
+        </div>
+
+        {/* Desktop View - Height-Based Grid Layout */}
+        <div className="hidden lg:grid lg:grid-cols-2 gap-6">
           {/* Left Column */}
-          <div className="space-y-3 md:space-y-5">
+          <div ref={leftColumnRef} className="space-y-5">
+            {/* AddFoodForm - Always at top of left */}
             <AddFoodForm
               onAddFood={addFoodToLog}
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
             />
-            <FoodList
-              dailyLog={dailyLog}
-              onUpdateQuantity={updateFoodQuantity}
-              onRemoveFood={removeFoodFromLog}
-            />
+
+            {/* Left Card: Summary + Left Meals */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-white/20">
+              {/* Food Log Summary Header */}
+              {dailyLog.length > 0 && (
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-lg font-bold text-gray-800 flex items-center">
+                    <Clock className="w-5 h-5 mr-2 text-blue-600" />
+                    Today's Diet
+                  </h2>
+                  <div className="flex items-center gap-5">
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-green-600">
+                        {totalCalories}
+                      </div>
+                      <div className="text-xs text-gray-600">Calories</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-purple-600">
+                        {totalProtein}g
+                      </div>
+                      <div className="text-xs text-gray-600">Protein</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Meal Sections for Left Column (inside the same border) */}
+              <div className="space-y-3">
+                {leftMealSections.map((meal) => {
+                  const entries = groupedLog[meal.value];
+                  return (
+                    <div key={meal.value} data-meal-section>
+                      <MealSection
+                        meal={meal}
+                        entries={entries}
+                        onUpdateQuantity={updateFoodQuantity}
+                        onRemoveFood={removeFoodFromLog}
+                      />
+                    </div>
+                  );
+                })}
+
+                {/* Empty State (if no meals) */}
+                {dailyLog.length === 0 && (
+                  <div className="text-center py-6">
+                    <div className="text-5xl mb-3">🍽️</div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1.5">
+                      No foods logged yet
+                    </h3>
+                    <p className="text-gray-800 text-sm">
+                      Start by adding your first food item using the form!
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Right Column */}
-          <div className="space-y-3 md:space-y-5">
+          <div ref={rightColumnRef} className="space-y-5">
+            {/* ProgressGrid - Always at top of right */}
             <ProgressGrid
               dailyLog={dailyLog}
               profile={rdaProfiles[selectedProfile]}
             />
+
+            {/* Right Card: All overflow meals grouped together */}
+            {rightMealSections.length > 0 && (
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-white/20">
+                <div className="space-y-3">
+                  {rightMealSections.map((meal) => {
+                    const entries = groupedLog[meal.value];
+                    return (
+                      <div key={meal.value} data-meal-section>
+                        <MealSection
+                          meal={meal}
+                          entries={entries}
+                          onUpdateQuantity={updateFoodQuantity}
+                          onRemoveFood={removeFoodFromLog}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>

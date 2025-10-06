@@ -336,7 +336,7 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                             {totalNutrition?.protein?.toFixed(0) || 0}
                           </span>
                           <span className="text-3xl text-gray-500 font-semibold">
-                            g
+                            / {profile?.macros?.protein || 0} g
                           </span>
                         </div>
                         <div className="h-2 bg-gray-800 rounded-full overflow-hidden mt-4">
@@ -472,7 +472,7 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
               >
                 <ImageIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                 <span className="font-semibold text-[11px] md:text-xs">
-                  {customBgImage ? "Change" : "Add Photo"}
+                  {customBgImage ? "Change" : "Add Your Photo"}
                 </span>
               </button>
 

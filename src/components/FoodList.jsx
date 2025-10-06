@@ -79,12 +79,7 @@ const FoodList = ({ dailyLog, onUpdateQuantity, onRemoveFood }) => {
     onUpdateQuantity(id, newQuantity);
   };
 
-  const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+  // Removed log time display per request
 
   const getMealTypeInfo = (mealType) => {
     return mealTypes.find((meal) => meal.value === mealType) || mealTypes[0];
@@ -224,10 +219,7 @@ const FoodList = ({ dailyLog, onUpdateQuantity, onRemoveFood }) => {
                                 {nutrition.calories.toFixed(0)} cal •{" "}
                                 {nutrition.protein.toFixed(1)}g protein
                               </div>
-                              <div className="text-xs text-gray-500 flex items-center">
-                                <Clock className="w-2.5 h-2.5 mr-1" />
-                                {formatTime(entry.timestamp)}
-                              </div>
+                              {/* Time removed */}
                             </div>
                           </div>
 

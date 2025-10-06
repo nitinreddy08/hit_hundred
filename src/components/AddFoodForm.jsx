@@ -7,6 +7,23 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedFood, setSelectedFood] = useState(null);
   const [quantity, setQuantity] = useState(""); // Empty until food selected
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  const placeholderLines = [
+    "eg: 🥚 Egg",
+    "eg: 🍗 Chicken",
+    "eg: 🥣 Oats",
+    "eg: 🥛 Milk",
+    "eg: 🍌 Banana",
+    "eg: 🧀 Paneer",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % placeholderLines.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Get the appropriate unit and default quantity for the selected food
   const getUnitInfo = () => {
@@ -173,7 +190,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               onFocus={() => setShowDropdown(true)}
-              placeholder="Search for foods..."
+              placeholder={placeholderLines[placeholderIndex]}
               className="w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black text-sm"
             />
             {searchQuery && (
