@@ -1716,6 +1716,38 @@ export const FOOD_DB = [
 
 // --- Helper functions ---
 
+// Ensure every food exposes the full per-gram nutrient key set
+const ALL_NUTRIENT_KEYS = [
+  "calories",
+  "protein",
+  "carbs",
+  "fat",
+  "omega3",
+  "fiber",
+  "vitaminA",
+  "vitaminC",
+  "vitaminD",
+  "vitaminE",
+  "vitaminK",
+  "calcium",
+  "iron",
+  "magnesium",
+  "potassium",
+  "zinc",
+];
+
+function normalizeNutrients(nutrients = {}) {
+  const normalized = {};
+  for (const key of ALL_NUTRIENT_KEYS) {
+    normalized[key] = Number.isFinite(nutrients[key]) ? nutrients[key] : 0;
+  }
+  // Also keep any additional existing keys not in the canonical list
+  for (const [k, v] of Object.entries(nutrients)) {
+    if (!(k in normalized)) normalized[k] = v;
+  }
+  return normalized;
+}
+
 export function searchFoods(query, limit = 10) {
   if (!query) return FOOD_DB.slice(0, limit);
   const lowerQuery = query.toLowerCase();
@@ -1729,7 +1761,7 @@ export function searchFoods(query, limit = 10) {
     category: food.category,
     emoji: food.emoji,
     servingSize: getDefaultServingSize(food),
-    nutrition: food.nutrients,
+    nutrition: normalizeNutrients(food.nutrients),
     defaultUnit: food.defaultUnit,
     defaultQuantity: food.defaultQuantity,
     pieceWeight: food.pieceWeight,
@@ -1750,7 +1782,7 @@ export function getFoodByName(name) {
     category: food.category,
     emoji: food.emoji,
     servingSize: getDefaultServingSize(food),
-    nutrition: food.nutrients,
+    nutrition: normalizeNutrients(food.nutrients),
     defaultUnit: food.defaultUnit,
     defaultQuantity: food.defaultQuantity,
     pieceWeight: food.pieceWeight,
@@ -1822,7 +1854,7 @@ export const foodDatabase = FOOD_DB.reduce((acc, food) => {
     category: food.category,
     emoji: food.emoji,
     servingSize: getDefaultServingSize(food),
-    nutrition: food.nutrients,
+    nutrition: normalizeNutrients(food.nutrients),
     defaultUnit: food.defaultUnit,
     defaultQuantity: food.defaultQuantity,
     pieceWeight: food.pieceWeight,

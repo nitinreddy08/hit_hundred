@@ -30,9 +30,11 @@ const ProfileSelector = ({
 
   const getUnit = (nutrient) => {
     if (nutrient === "calories") return "kcal";
-    if (["calcium", "iron", "potassium", "zinc"].includes(nutrient))
+    if (
+      ["calcium", "iron", "potassium", "zinc", "magnesium"].includes(nutrient)
+    )
       return "mg";
-    if (["vitaminA", "vitaminD"].includes(nutrient)) return "mcg";
+    if (["vitaminA", "vitaminD", "vitaminK"].includes(nutrient)) return "mcg";
     if (
       [
         "vitaminC",
@@ -76,6 +78,17 @@ const ProfileSelector = ({
 
           {/* Content - 15% smaller padding */}
           <div className="p-3 md:p-5">
+            {/* Disclaimer moved to hero section */}
+            <div className="mb-3 md:mb-4 p-2.5 md:p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed text-left">
+                <span className="font-semibold text-gray-700">Disclaimer:</span>{" "}
+                This app is designed for general use, with goal intakes set for
+                individuals without any underlying medical conditions. If you
+                have any medical conditions or specific dietary needs, please
+                consult a healthcare professional before using this app and
+                tailor your nutrition goals accordingly.
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
               {profiles.map((profile) => (
                 <div
@@ -145,19 +158,28 @@ const ProfileSelector = ({
                         <div className="flex justify-between">
                           <span className="text-gray-800">Carbs:</span>
                           <span className="font-medium text-gray-800">
-                            {profile.macros.carbs} g,
+                            {typeof profile.macros.carbs === "object"
+                              ? `${profile.macros.carbs.min}–${profile.macros.carbs.max}`
+                              : profile.macros.carbs}{" "}
+                            g,
                           </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-800">Fat:</span>
                           <span className="font-medium text-gray-800">
-                            {profile.macros.fat} g
+                            {typeof profile.macros.fat === "object"
+                              ? `${profile.macros.fat.min}–${profile.macros.fat.max}`
+                              : profile.macros.fat}{" "}
+                            g
                           </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-800">Fiber:</span>
                           <span className="font-medium text-gray-800">
-                            {profile.macros.fiber} g,
+                            {typeof profile.macros.fiber === "object"
+                              ? `${profile.macros.fiber.min}–${profile.macros.fiber.max}`
+                              : profile.macros.fiber}{" "}
+                            g,
                           </span>
                         </div>
                       </div>
@@ -191,6 +213,16 @@ const ProfileSelector = ({
                           <span className="font-medium text-gray-800">
                             {formatNutrientValue(
                               profile.minerals.potassium,
+                              "mg"
+                            )}{" "}
+                            mg,
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-800">Magnesium:</span>
+                          <span className="font-medium text-gray-800">
+                            {formatNutrientValue(
+                              profile.minerals.magnesium,
                               "mg"
                             )}{" "}
                             mg,
@@ -240,6 +272,12 @@ const ProfileSelector = ({
                             {profile.vitamins.vitaminE} mg,
                           </span>
                         </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-800">Vitamin K:</span>
+                          <span className="font-medium text-gray-800">
+                            {profile.vitamins.vitaminK} mcg,
+                          </span>
+                        </div>
                       </div>
                     </div>
 
@@ -253,7 +291,10 @@ const ProfileSelector = ({
                         <div className="flex justify-between">
                           <span className="text-gray-800">Omega-3:</span>
                           <span className="font-medium text-gray-800">
-                            {profile.fats.omega3} g,
+                            {typeof profile.fats.omega3 === "object"
+                              ? `${profile.fats.omega3.min}–${profile.fats.omega3.max}`
+                              : profile.fats.omega3}{" "}
+                            g,
                           </span>
                         </div>
                       </div>
@@ -283,17 +324,7 @@ const ProfileSelector = ({
             </div> */}
           </div>
 
-          {/* Footer Disclaimer attached to card */}
-          <div className="p-3 md:p-4 border-t border-gray-200 bg-gray-50">
-            <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed text-left">
-              <span className="font-semibold text-gray-700">Disclaimer:</span>{" "}
-              This app is designed for general use, with goal intakes set for
-              individuals without any underlying medical conditions. If you have
-              any medical conditions or specific dietary needs, please consult a
-              healthcare professional before using this app and tailor your
-              nutrition goals accordingly.
-            </p>
-          </div>
+          {/* Disclaimer moved above; footer removed */}
         </div>
       </div>
     </div>

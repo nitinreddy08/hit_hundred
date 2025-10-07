@@ -36,7 +36,15 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
   // Removed unit info since we're always in cart mode
 
-  const [mealType, setMealType] = useState("breakfast");
+  const getDefaultMealType = () => {
+    const hour = new Date().getHours();
+    if (hour < 11) return "breakfast"; // 00:00 - 10:59
+    if (hour < 16) return "lunch"; // 11:00 - 15:59
+    if (hour < 19) return "snack"; // 16:00 - 18:59
+    return "dinner"; // 19:00 - 23:59
+  };
+
+  const [mealType, setMealType] = useState(getDefaultMealType);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 

@@ -9,14 +9,15 @@ export const rdaProfiles = {
     activity: "Active",
     macros: {
       calories: 2500, // kcal
-      protein: 130, // g (optimal for fitness/muscle building)
-      carbs: 325, // g (45-65% of calories)
-      fat: 83, // g (25-35% of calories)
-      fiber: 38, // g
+      protein: 135, // g
+      carbs: { min: 300, max: 350 }, // g
+      fat: { min: 70, max: 80 }, // g
+      fiber: { min: 30, max: 35 }, // g
     },
     minerals: {
       calcium: 1000, // mg
-      iron: 8, // mg
+      iron: 17, // mg
+      magnesium: 400, // mg
       potassium: 3500, // mg
       zinc: 11, // mg
     },
@@ -25,9 +26,10 @@ export const rdaProfiles = {
       vitaminC: 90, // mg
       vitaminD: 15, // mcg
       vitaminE: 15, // mg
+      vitaminK: 120, // mcg
     },
     fats: {
-      omega3: 1.6, // g
+      omega3: { min: 2, max: 3 }, // g
     },
   },
   FEMALE_ADULT: {
@@ -37,15 +39,16 @@ export const rdaProfiles = {
     activity: "Active",
     macros: {
       calories: 2000, // kcal
-      protein: 92, // g (optimal for fitness/muscle building)
-      carbs: 260, // g (45-65% of calories)
-      fat: 67, // g (25-35% of calories)
-      fiber: 25, // g
+      protein: 92, // g
+      carbs: { min: 250, max: 300 }, // g
+      fat: { min: 60, max: 70 }, // g
+      fiber: { min: 25, max: 30 }, // g
     },
     minerals: {
       calcium: 1000, // mg
-      iron: 18, // mg (higher due to menstruation)
-      potassium: 2600, // mg
+      iron: 18, // mg
+      magnesium: 310, // mg
+      potassium: 3500, // mg
       zinc: 8, // mg
     },
     vitamins: {
@@ -53,9 +56,10 @@ export const rdaProfiles = {
       vitaminC: 75, // mg
       vitaminD: 15, // mcg
       vitaminE: 15, // mg
+      vitaminK: 90, // mcg
     },
     fats: {
-      omega3: 1.1, // g
+      omega3: { min: 2, max: 3 }, // g
     },
   },
 };

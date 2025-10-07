@@ -30,6 +30,29 @@ const ProgressGrid = ({ dailyLog, profile }) => {
 
   const totalNutrition = calculateTotalNutrition();
 
+  const resolveRequired = (req) => {
+    if (req && typeof req === "object") {
+      const min = Number(req.min ?? 0);
+      const max = Number(req.max ?? min);
+      if (Number.isFinite(min) && Number.isFinite(max)) {
+        return (min + max) / 2;
+      }
+      return Number(min) || 0;
+    }
+    return Number(req) || 0;
+  };
+
+  const formatRequiredDisplay = (req) => {
+    if (req && typeof req === "object") {
+      const hasMin = Number.isFinite(req.min);
+      const hasMax = Number.isFinite(req.max);
+      if (hasMin && hasMax) return `${req.min}–${req.max}`;
+      if (hasMin) return `${req.min}`;
+      if (hasMax) return `${req.max}`;
+    }
+    return `${req}`;
+  };
+
   // Calculate overall progress percentage
   const calculateOverallProgress = () => {
     const categories = ["macros", "minerals", "vitamins", "fats"];
@@ -39,8 +62,8 @@ const ProgressGrid = ({ dailyLog, profile }) => {
     categories.forEach((category) => {
       Object.keys(profile[category]).forEach((nutrient) => {
         const consumed = totalNutrition[nutrient] || 0;
-        const required = profile[category][nutrient];
-        const percentage = calculateRdaPercentage(consumed, required);
+        const requiredResolved = resolveRequired(profile[category][nutrient]);
+        const percentage = calculateRdaPercentage(consumed, requiredResolved);
         totalPercentage += Math.min(percentage, 100); // Cap at 100% for overall calculation
         nutrientCount++;
       });
@@ -75,7 +98,8 @@ const ProgressGrid = ({ dailyLog, profile }) => {
   const renderNutrientCard = (category, nutrient, label, unit, icon) => {
     const consumed = totalNutrition[nutrient] || 0;
     const required = profile[category][nutrient];
-    const percentage = calculateRdaPercentage(consumed, required);
+    const requiredResolved = resolveRequired(required);
+    const percentage = calculateRdaPercentage(consumed, requiredResolved);
     const colorClass = getProgressColor(percentage);
 
     return (
@@ -101,7 +125,7 @@ const ProgressGrid = ({ dailyLog, profile }) => {
               {consumed.toFixed(1)} {unit}
             </span>
             <span>
-              {required} {unit}
+              {formatRequiredDisplay(required)} {unit}
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-1.5">
