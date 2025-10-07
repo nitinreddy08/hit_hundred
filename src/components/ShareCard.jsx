@@ -27,17 +27,51 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
 
   if (!isOpen) return null;
 
-  // Calculate overall progress across calories, protein, carbs, and fat
+  // Helper: resolve range {min,max} to midpoint, or number
+  const resolveRequired = (req) => {
+    if (req && typeof req === "object") {
+      const min = Number(req.min ?? 0);
+      const max = Number(req.max ?? min);
+      if (Number.isFinite(min) && Number.isFinite(max)) return (min + max) / 2;
+      return Number(min) || 0;
+    }
+    return Number(req) || 0;
+  };
+
+  // Calculate overall progress across calories, protein, carbs, fat, fiber, and creatine
   const calculateProgress = () => {
     if (!profile || !profile.macros || !totalNutrition) return 0;
 
-    const macroKeys = ["calories", "protein", "carbs", "fat"];
+    const targets = [
+      {
+        value: Number(totalNutrition?.calories) || 0,
+        goal: resolveRequired(profile.macros?.calories),
+      },
+      {
+        value: Number(totalNutrition?.protein) || 0,
+        goal: resolveRequired(profile.macros?.protein),
+      },
+      {
+        value: Number(totalNutrition?.carbs) || 0,
+        goal: resolveRequired(profile.macros?.carbs),
+      },
+      {
+        value: Number(totalNutrition?.fat) || 0,
+        goal: resolveRequired(profile.macros?.fat),
+      },
+      {
+        value: Number(totalNutrition?.fiber) || 0,
+        goal: resolveRequired(profile.macros?.fiber),
+      },
+      {
+        value: Number(totalNutrition?.creatine) || 0,
+        goal: resolveRequired(profile.fats?.creatine),
+      },
+    ];
 
-    const ratios = macroKeys
-      .map((key) => {
-        const goal = Number(profile.macros?.[key]) || 0;
-        const value = Number(totalNutrition?.[key]) || 0;
-        if (goal <= 0) return null; // skip missing/invalid goals
+    const ratios = targets
+      .map(({ value, goal }) => {
+        if (!goal || goal <= 0) return null;
         const pct = (value / goal) * 100;
         if (!isFinite(pct)) return 0;
         return Math.max(0, Math.min(100, pct));
@@ -405,6 +439,62 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
                             style={{
                               width: `${Math.min(
                                 (totalNutrition?.fat / profile?.macros?.fat) *
+                                  100 || 0,
+                                100
+                              )}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Fiber */}
+                      <div className="space-y-3">
+                        <p className="text-xl text-gray-500 uppercase tracking-wider font-semibold">
+                          Fiber
+                        </p>
+                        <div className="flex items-baseline space-x-3">
+                          <span className="text-7xl font-black text-white">
+                            {totalNutrition?.fiber?.toFixed(0) || 0}
+                          </span>
+                          <span className="text-3xl text-gray-500 font-semibold">
+                            g
+                          </span>
+                        </div>
+                        <div className="h-2 bg-gray-800 rounded-full overflow-hidden mt-4">
+                          <div
+                            className="h-full bg-emerald-500 rounded-full"
+                            style={{
+                              width: `${Math.min(
+                                ((totalNutrition?.fiber || 0) /
+                                  resolveRequired(profile?.macros?.fiber)) *
+                                  100 || 0,
+                                100
+                              )}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Creatine */}
+                      <div className="space-y-3">
+                        <p className="text-xl text-gray-500 uppercase tracking-wider font-semibold">
+                          Creatine
+                        </p>
+                        <div className="flex items-baseline space-x-3">
+                          <span className="text-7xl font-black text-white">
+                            {totalNutrition?.creatine?.toFixed(1) || 0}
+                          </span>
+                          <span className="text-3xl text-gray-500 font-semibold">
+                            g
+                          </span>
+                        </div>
+                        <div className="h-2 bg-gray-800 rounded-full overflow-hidden mt-4">
+                          <div
+                            className="h-full bg-pink-500 rounded-full"
+                            style={{
+                              width: `${Math.min(
+                                ((totalNutrition?.creatine || 0) /
+                                  resolveRequired(profile?.fats?.creatine)) *
                                   100 || 0,
                                 100
                               )}%`,
