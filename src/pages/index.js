@@ -449,7 +449,7 @@ export default function Home() {
             {/* Left - Developer */}
             <div className="text-center md:text-left">
               <p className="text-sm text-gray-600">
-                Built with 💙 by{" "}
+                Built by{" "}
                 <a
                   href="https://nitinreddy.netlify.app/"
                   target="_blank"
