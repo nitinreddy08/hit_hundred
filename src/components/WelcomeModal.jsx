@@ -2,7 +2,7 @@ import { useState } from "react";
 import { X, Target, TrendingUp, Heart, Star, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
-const WelcomeModal = ({ isOpen, onClose }) => {
+const WelcomeModal = ({ isOpen, onClose, onRequireProfile }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   if (!isOpen) return null;
@@ -43,6 +43,7 @@ const WelcomeModal = ({ isOpen, onClose }) => {
       setCurrentStep(currentStep + 1);
     } else {
       onClose();
+      if (onRequireProfile) onRequireProfile();
     }
   };
 

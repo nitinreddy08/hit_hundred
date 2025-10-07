@@ -283,15 +283,17 @@ const ProfileSelector = ({
             </div> */}
           </div>
 
-          {/* Footer */}
-          {/* <div className="flex justify-end p-6 border-t border-gray-200">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              Cancel
-            </button>
-          </div> */}
+          {/* Footer Disclaimer attached to card */}
+          <div className="p-3 md:p-4 border-t border-gray-200 bg-gray-50">
+            <p className="text-[10px] md:text-xs text-gray-600 leading-relaxed text-left">
+              <span className="font-semibold text-gray-700">Disclaimer:</span>{" "}
+              This app is designed for general use, with goal intakes set for
+              individuals without any underlying medical conditions. If you have
+              any medical conditions or specific dietary needs, please consult a
+              healthcare professional before using this app and tailor your
+              nutrition goals accordingly.
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -379,6 +379,9 @@ export default function Home() {
           setShowWelcomeModal(false);
           localStorage.setItem("hh-welcome-seen", "true");
         }}
+        onRequireProfile={() => {
+          setShowProfileModal(true);
+        }}
       />
 
       <ShareCard
