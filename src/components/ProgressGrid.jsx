@@ -162,6 +162,7 @@ const ProgressGrid = ({ dailyLog, profile }) => {
         { key: "calcium", label: "Calcium", unit: "mg", icon: "🦴" },
         { key: "iron", label: "Iron", unit: "mg", icon: "🩸" },
         { key: "potassium", label: "Potassium", unit: "mg", icon: "🍌" },
+        { key: "magnesium", label: "Magnesium", unit: "mg", icon: "⚙️" },
         { key: "zinc", label: "Zinc", unit: "mg", icon: "🔋" },
       ],
     },
@@ -174,6 +175,7 @@ const ProgressGrid = ({ dailyLog, profile }) => {
         { key: "vitaminC", label: "Vitamin C", unit: "mg", icon: "🍊" },
         { key: "vitaminD", label: "Vitamin D", unit: "mcg", icon: "☀️" },
         { key: "vitaminE", label: "Vitamin E", unit: "mg", icon: "🌰" },
+        { key: "vitaminK", label: "Vitamin K", unit: "mcg", icon: "🩹" },
       ],
     },
     {

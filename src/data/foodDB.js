@@ -131,6 +131,9 @@ export const FOOD_DB = [
       iron: 0.018,
       vitaminA: 1.5,
       vitaminD: 0.022,
+      vitaminE: 0.002,
+      vitaminK: 0.0003,
+      zinc: 0.014,
     },
   },
   {
@@ -201,6 +204,9 @@ export const FOOD_DB = [
       calcium: 1.13,
       vitaminD: 0.005,
       vitaminA: 0.46,
+      vitaminK: 0.0004,
+      magnesium: 0.11,
+      potassium: 1.5,
     },
   },
   {
@@ -228,6 +234,9 @@ export const FOOD_DB = [
       carbs: 0.036,
       fat: 0.004,
       calcium: 1.1,
+      vitaminA: 0.002,
+      vitaminK: 0.002,
+      magnesium: 0.11,
     },
   },
   {
@@ -241,6 +250,9 @@ export const FOOD_DB = [
       carbs: 0.045,
       fat: 0.01,
       calcium: 1.2,
+      vitaminA: 0.002,
+      vitaminK: 0.002,
+      magnesium: 0.11,
     },
   },
   {
@@ -254,6 +266,9 @@ export const FOOD_DB = [
       carbs: 0.047,
       fat: 0.041,
       calcium: 1.21,
+      vitaminA: 0.002,
+      vitaminK: 0.002,
+      magnesium: 0.11,
     },
   },
   {
@@ -267,6 +282,9 @@ export const FOOD_DB = [
       carbs: 0.049,
       fat: 0.009,
       calcium: 1.16,
+      vitaminA: 0.001,
+      vitaminK: 0.001,
+      magnesium: 0.11,
     },
   },
   {
@@ -281,6 +299,8 @@ export const FOOD_DB = [
       fat: 0.2,
       calcium: 4.8,
       vitaminA: 1.95,
+      magnesium: 0.23,
+      zinc: 0.012,
     },
   },
   {
@@ -294,6 +314,8 @@ export const FOOD_DB = [
       carbs: 0.04,
       fat: 0.1,
       calcium: 3.8,
+      magnesium: 0.23,
+      zinc: 0.012,
     },
   },
   {
@@ -363,6 +385,8 @@ export const FOOD_DB = [
       fat: 0.036,
       iron: 0.005,
       potassium: 2.56,
+      magnesium: 0.29,
+      zinc: 0.004,
     },
   },
   {
@@ -415,6 +439,9 @@ export const FOOD_DB = [
       fat: 0.13,
       omega3: 0.023,
       vitaminD: 0.11,
+      potassium: 3.63,
+      magnesium: 0.29,
+      zinc: 0.004,
     },
   },
   {
@@ -441,6 +468,9 @@ export const FOOD_DB = [
       carbs: 0,
       fat: 0.008,
       omega3: 0.003,
+      potassium: 3.27,
+      magnesium: 0.3,
+      zinc: 0.004,
     },
   },
   {
@@ -524,6 +554,9 @@ export const FOOD_DB = [
       carbs: 0.097,
       fat: 0.048,
       calcium: 4.84,
+      magnesium: 1.0,
+      potassium: 1.6,
+      zinc: 0.01,
     },
   },
   {
@@ -539,6 +572,8 @@ export const FOOD_DB = [
       carbs: 0.02,
       fat: 0.01,
       calcium: 3.5,
+      magnesium: 0.6,
+      potassium: 1.2,
     },
   },
   {
@@ -553,6 +588,8 @@ export const FOOD_DB = [
       protein: 0.8,
       carbs: 0.06,
       fat: 0.07,
+      iron: 0.03,
+      zinc: 0.01,
     },
   },
   {
@@ -567,6 +604,8 @@ export const FOOD_DB = [
       protein: 0.77,
       carbs: 0.07,
       fat: 0.03,
+      calcium: 1.2,
+      magnesium: 0.7,
     },
   },
   {
@@ -596,6 +635,7 @@ export const FOOD_DB = [
       fat: 0.009,
       fiber: 0.018,
       iron: 0.004,
+      magnesium: 0.13,
     },
   },
   {
@@ -609,6 +649,7 @@ export const FOOD_DB = [
       carbs: 0.28,
       fat: 0.003,
       fiber: 0.004,
+      magnesium: 0.12,
     },
   },
   {
@@ -691,6 +732,7 @@ export const FOOD_DB = [
       fat: 0.069,
       fiber: 0.106,
       iron: 0.047,
+      magnesium: 2.7,
     },
   },
   {
@@ -705,6 +747,8 @@ export const FOOD_DB = [
       fat: 0.036,
       fiber: 0.071,
       iron: 0.032,
+      magnesium: 0.25,
+      zinc: 0.003,
     },
   },
   {
@@ -718,6 +762,7 @@ export const FOOD_DB = [
       carbs: 0.5,
       fat: 0.036,
       fiber: 0.029,
+      magnesium: 0.11,
     },
   },
   {
@@ -731,6 +776,7 @@ export const FOOD_DB = [
       carbs: 0.43,
       fat: 0.042,
       fiber: 0.075,
+      magnesium: 0.27,
     },
   },
   {
@@ -745,6 +791,7 @@ export const FOOD_DB = [
       fat: 0.005,
       fiber: 0.035,
       iron: 0.013,
+      magnesium: 0.18,
     },
   },
   {
@@ -761,6 +808,9 @@ export const FOOD_DB = [
       vitaminA: 9.61,
       vitaminC: 0.2,
       potassium: 4.75,
+      magnesium: 0.25,
+      vitaminE: 0.002,
+      vitaminK: 0.001,
     },
   },
   {
@@ -793,6 +843,9 @@ export const FOOD_DB = [
       fiber: 0.08,
       iron: 0.033,
       potassium: 3.69,
+      magnesium: 0.36,
+      zinc: 0.003,
+      vitaminK: 0.005,
     },
   },
   {
@@ -807,6 +860,8 @@ export const FOOD_DB = [
       fat: 0.015,
       fiber: 0.075,
       iron: 0.03,
+      magnesium: 0.28,
+      zinc: 0.002,
     },
   },
   {
@@ -821,6 +876,9 @@ export const FOOD_DB = [
       fat: 0.026,
       fiber: 0.076,
       iron: 0.029,
+      magnesium: 0.48,
+      zinc: 0.003,
+      potassium: 2.91,
     },
   },
   {
@@ -835,6 +893,8 @@ export const FOOD_DB = [
       fat: 0.005,
       fiber: 0.087,
       iron: 0.021,
+      magnesium: 0.7,
+      zinc: 0.009,
     },
   },
   {
@@ -850,6 +910,8 @@ export const FOOD_DB = [
       fiber: 0.064,
       iron: 0.029,
       potassium: 4.03,
+      magnesium: 0.45,
+      zinc: 0.003,
     },
   },
   {
@@ -864,6 +926,8 @@ export const FOOD_DB = [
       fat: 0.004,
       fiber: 0.077,
       iron: 0.015,
+      magnesium: 0.48,
+      zinc: 0.002,
     },
   },
   {
@@ -989,6 +1053,7 @@ export const FOOD_DB = [
       vitaminC: 0.65,
       calcium: 0.4,
       iron: 0.007,
+      vitaminK: 1.41,
     },
   },
   {
@@ -1007,6 +1072,7 @@ export const FOOD_DB = [
       calcium: 1.36,
       iron: 0.036,
       potassium: 4.66,
+      vitaminK: 4.93,
     },
   },
   {
@@ -1080,6 +1146,7 @@ export const FOOD_DB = [
       fat: 0.005,
       fiber: 0.023,
       vitaminC: 0.44,
+      vitaminK: 0.016,
     },
   },
   {
@@ -1094,6 +1161,7 @@ export const FOOD_DB = [
       fat: 0.001,
       fiber: 0.025,
       vitaminC: 0.37,
+      vitaminK: 0.082,
     },
   },
   {
@@ -1108,6 +1176,8 @@ export const FOOD_DB = [
       fat: 0.001,
       fiber: 0.033,
       vitaminC: 0.12,
+      vitaminK: 0.014,
+      magnesium: 0.25,
     },
   },
   {
@@ -1122,6 +1192,8 @@ export const FOOD_DB = [
       fat: 0.002,
       fiber: 0.02,
       iron: 0.008,
+      vitaminK: 0.002,
+      magnesium: 0.23,
     },
   },
   {
@@ -1136,6 +1208,8 @@ export const FOOD_DB = [
       fat: 0.001,
       fiber: 0.032,
       calcium: 0.77,
+      vitaminK: 0.031,
+      magnesium: 0.57,
     },
   },
   {
@@ -1151,6 +1225,8 @@ export const FOOD_DB = [
       fiber: 0.022,
       vitaminD: 0.003,
       potassium: 3.56,
+      vitaminK: 0.0004,
+      magnesium: 0.09,
     },
   },
 
@@ -1167,6 +1243,7 @@ export const FOOD_DB = [
       fat: 0.002,
       fiber: 0.024,
       vitaminC: 0.046,
+      vitaminK: 0.002,
     },
   },
   {
@@ -1182,6 +1259,7 @@ export const FOOD_DB = [
       fiber: 0.026,
       potassium: 3.58,
       vitaminC: 0.085,
+      magnesium: 0.27,
     },
   },
   {
@@ -1226,6 +1304,7 @@ export const FOOD_DB = [
       fat: 0.002,
       fiber: 0.004,
       vitaminC: 0.081,
+      vitaminA: 0.005,
     },
   },
   {
@@ -1241,6 +1320,7 @@ export const FOOD_DB = [
       fiber: 0.016,
       vitaminC: 0.36,
       vitaminA: 0.54,
+      vitaminK: 0.004,
     },
   },
   {
@@ -1255,6 +1335,7 @@ export const FOOD_DB = [
       fat: 0.012,
       fiber: 0.04,
       vitaminC: 0.1,
+      vitaminK: 0.016,
     },
   },
   {
@@ -1269,6 +1350,7 @@ export const FOOD_DB = [
       fat: 0.002,
       fiber: 0.009,
       vitaminC: 0.032,
+      vitaminK: 0.015,
     },
   },
   {
@@ -1283,6 +1365,7 @@ export const FOOD_DB = [
       fat: 0.003,
       fiber: 0.02,
       vitaminC: 0.59,
+      vitaminK: 0.002,
     },
   },
   {
@@ -1297,6 +1380,7 @@ export const FOOD_DB = [
       fat: 0.003,
       fiber: 0.024,
       vitaminC: 0.097,
+      vitaminK: 0.019,
     },
   },
   {
@@ -1311,6 +1395,8 @@ export const FOOD_DB = [
       fat: 0.15,
       fiber: 0.07,
       potassium: 4.85,
+      vitaminK: 0.021,
+      magnesium: 0.29,
     },
   },
 
@@ -1328,6 +1414,9 @@ export const FOOD_DB = [
       fiber: 0.125,
       calcium: 2.71,
       iron: 0.036,
+      magnesium: 2.68,
+      zinc: 0.031,
+      vitaminE: 0.256,
     },
   },
   {
@@ -1342,6 +1431,9 @@ export const FOOD_DB = [
       fat: 0.661,
       fiber: 0.068,
       omega3: 0.089,
+      magnesium: 1.58,
+      zinc: 0.031,
+      vitaminE: 0.207,
     },
   },
   {
@@ -1468,6 +1560,8 @@ export const FOOD_DB = [
       fat: 0.002,
       vitaminC: 0.5,
       potassium: 2.0,
+      magnesium: 0.1,
+      vitaminA: 0.01,
     },
   },
   {
@@ -1481,6 +1575,8 @@ export const FOOD_DB = [
       carbs: 0.006,
       fat: 0.011,
       calcium: 1.2,
+      vitaminD: 0.001,
+      vitaminE: 0.002,
     },
   },
   {
@@ -1494,6 +1590,7 @@ export const FOOD_DB = [
       carbs: 0.037,
       fat: 0.002,
       potassium: 2.5,
+      magnesium: 0.25,
     },
   },
   {
@@ -1523,6 +1620,9 @@ export const FOOD_DB = [
       fat: 0.428,
       fiber: 0.108,
       iron: 0.119,
+      magnesium: 0.23,
+      zinc: 0.013,
+      vitaminE: 0.103,
     },
   },
   {
@@ -1535,6 +1635,7 @@ export const FOOD_DB = [
       protein: 0.003,
       carbs: 0.824,
       fat: 0,
+      potassium: 0.52,
     },
   },
   {
@@ -1549,6 +1650,8 @@ export const FOOD_DB = [
       fat: 0.003,
       fiber: 0.07,
       potassium: 6.96,
+      magnesium: 0.35,
+      vitaminK: 0.003,
     },
   },
   {
@@ -1561,6 +1664,7 @@ export const FOOD_DB = [
       protein: 0,
       carbs: 0,
       fat: 1.0,
+      vitaminE: 0.143,
     },
   },
   {
@@ -1599,6 +1703,8 @@ export const FOOD_DB = [
       fat: 0.1,
       fiber: 0.05,
       iron: 0.02,
+      magnesium: 0.24,
+      zinc: 0.01,
     },
   },
   {
@@ -1612,6 +1718,7 @@ export const FOOD_DB = [
       carbs: 0.777,
       fat: 0.044,
       fiber: 0.145,
+      magnesium: 0.36,
     },
   },
 
@@ -1657,6 +1764,7 @@ export const FOOD_DB = [
       carbs: 0.5,
       fat: 0.075,
       fiber: 0.07,
+      magnesium: 0.35,
     },
   },
   {
@@ -1670,6 +1778,7 @@ export const FOOD_DB = [
       carbs: 0.55,
       fat: 0.02,
       fiber: 0.06,
+      magnesium: 0.35,
     },
   },
   {
@@ -1683,6 +1792,7 @@ export const FOOD_DB = [
       carbs: 0.55,
       fat: 0.03,
       fiber: 0.08,
+      magnesium: 1.37,
     },
   },
   {
@@ -1696,6 +1806,7 @@ export const FOOD_DB = [
       carbs: 0.55,
       fat: 0.05,
       fiber: 0.08,
+      magnesium: 1.89,
     },
   },
   {
@@ -1710,6 +1821,7 @@ export const FOOD_DB = [
       fat: 0.025,
       fiber: 0.09,
       calcium: 0.35,
+      magnesium: 1.37,
     },
   },
 ];
@@ -1746,6 +1858,21 @@ function normalizeNutrients(nutrients = {}) {
     if (!(k in normalized)) normalized[k] = v;
   }
   return normalized;
+}
+
+// Development-time validator: ensures each food has all nutrient keys and numeric values
+export function validateFoodDatabase() {
+  const problems = [];
+  FOOD_DB.forEach((food) => {
+    const n = normalizeNutrients(food.nutrients);
+    ALL_NUTRIENT_KEYS.forEach((k) => {
+      const v = n[k];
+      if (!Number.isFinite(v)) {
+        problems.push({ name: food.name, nutrient: k, value: v });
+      }
+    });
+  });
+  return problems;
 }
 
 export function searchFoods(query, limit = 10) {

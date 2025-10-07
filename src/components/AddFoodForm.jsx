@@ -8,7 +8,7 @@ import {
   ShoppingCart,
   Trash2,
 } from "lucide-react";
-import { searchFoods, calculateNutrition } from "../data/foodDB";
+import { searchFoods, calculateNutrition, getFoodByName } from "../data/foodDB";
 
 const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,6 +51,82 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
 
+  // Close dropdown when clicking outside search or dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const inSearch =
+        searchRef.current && searchRef.current.contains(e.target);
+      const inDropdown =
+        dropdownRef.current && dropdownRef.current.contains(e.target);
+      if (!inSearch && !inDropdown) {
+        setShowDropdown(false);
+        setSelectedIndex(-1);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Curated suggestion pools by meal type
+  const MEAL_SUGGESTION_POOLS = {
+    breakfast: [
+      "Egg (Whole, Large)",
+      "Oats (Dry)",
+      "Greek Yogurt (Plain)",
+      "Banana (Medium)",
+      "Whole Milk",
+      "Paneer (Indian Cottage Cheese)",
+      "Almonds",
+      "Brown Rice (Cooked)",
+    ],
+    lunch: [
+      "Chicken Breast (Grilled)",
+      "Brown Rice (Cooked)",
+      "Dal (Mixed Lentils)",
+      "Chapati/Roti (Whole Wheat)",
+      "Spinach (Cooked)",
+      "Curd (Dahi)",
+      "Salmon (Cooked)",
+      "Kidney Beans (Rajma)",
+    ],
+    dinner: [
+      "Chicken Breast (Grilled)",
+      "Salmon (Cooked)",
+      "Quinoa (Cooked)",
+      "Broccoli (Cooked)",
+      "Paneer (Indian Cottage Cheese)",
+      "Ragi Roti (Finger Millet)",
+      "Tofu (Firm)",
+      "Moong Dal (Cooked)",
+    ],
+    snack: [
+      "Protein Bar (Generic)",
+      "Walnuts",
+      "Dates (Seedless)",
+      "Peanut Butter",
+      "Cottage Cheese (Low-Fat)",
+      "Popcorn (Air-Popped)",
+      "Hummus",
+      "Apple (Medium)",
+    ],
+  };
+
+  const pickRandom = (arr, n) => {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy.slice(0, n);
+  };
+
+  const getMealSuggestions = (meal) => {
+    const pool = MEAL_SUGGESTION_POOLS[meal] || MEAL_SUGGESTION_POOLS.breakfast;
+    const names = pickRandom(pool, 5);
+    const foods = names.map((name) => getFoodByName(name)).filter(Boolean);
+    return foods;
+  };
+
   // Search foods when query changes
   useEffect(() => {
     if (searchQuery.length > 0) {
@@ -59,10 +135,31 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
       setShowDropdown(true);
       setSelectedIndex(-1);
     } else {
-      setSearchResults([]);
-      setShowDropdown(false);
+      // If empty query, show curated suggestions by meal type when focused
+      if (document.activeElement === searchRef.current) {
+        const suggestions = getMealSuggestions(mealType);
+        setSearchResults(suggestions);
+        setShowDropdown(true);
+        setSelectedIndex(-1);
+      } else {
+        setSearchResults([]);
+        setShowDropdown(false);
+      }
     }
   }, [searchQuery]);
+
+  // When meal type changes and input is empty/focused, refresh suggestions
+  useEffect(() => {
+    if (
+      searchQuery.length === 0 &&
+      document.activeElement === searchRef.current
+    ) {
+      const suggestions = getMealSuggestions(mealType);
+      setSearchResults(suggestions);
+      setShowDropdown(true);
+      setSelectedIndex(-1);
+    }
+  }, [mealType]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
@@ -179,7 +276,16 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              onFocus={() => setShowDropdown(true)}
+              onFocus={() => {
+                if (searchQuery.length === 0) {
+                  const suggestions = getMealSuggestions(mealType);
+                  setSearchResults(suggestions);
+                  setShowDropdown(true);
+                  setSelectedIndex(-1);
+                } else {
+                  setShowDropdown(true);
+                }
+              }}
               placeholder={placeholderLines[placeholderIndex]}
               className="w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black text-sm"
             />
