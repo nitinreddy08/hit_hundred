@@ -309,6 +309,11 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
               ref={dropdownRef}
               className="absolute z-10 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg max-h-52 overflow-y-auto"
             >
+              {searchQuery.length === 0 && (
+                <div className="px-2.5 py-1 text-[10px] text-gray-700 bg-gray-50 border-b border-gray-200 sticky top-0">
+                  Suggestions
+                </div>
+              )}
               {searchResults.map((food, index) => (
                 <div
                   key={food.name}
