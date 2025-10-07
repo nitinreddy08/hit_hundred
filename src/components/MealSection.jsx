@@ -74,8 +74,16 @@ const MealSection = ({ meal, entries, onUpdateQuantity, onRemoveFood }) => {
 
                     {isEditing ? (
                       <div className="flex items-center space-x-0.5">
+                        <label
+                          htmlFor={`meal-edit-qty-${entry.id}`}
+                          className="sr-only"
+                        >
+                          Quantity
+                        </label>
                         <input
                           type="number"
+                          id={`meal-edit-qty-${entry.id}`}
+                          name={`meal-edit-quantity-${entry.id}`}
                           value={editQuantity}
                           onChange={(e) => setEditQuantity(e.target.value)}
                           onKeyDown={(e) => {

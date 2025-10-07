@@ -550,8 +550,13 @@ const ShareCard = ({ isOpen, onClose, dailyLog, profile, totalNutrition }) => {
               </div>
 
               {/* Custom Background Upload */}
+              <label htmlFor="bg-upload" className="sr-only">
+                Upload background image
+              </label>
               <input
                 ref={fileInputRef}
+                id="bg-upload"
+                name="backgroundUpload"
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}

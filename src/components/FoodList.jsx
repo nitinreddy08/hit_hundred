@@ -232,8 +232,16 @@ const FoodList = ({ dailyLog, onUpdateQuantity, onRemoveFood }) => {
 
                               {isEditing ? (
                                 <div className="flex items-center space-x-0.5">
+                                  <label
+                                    htmlFor={`edit-qty-${entry.id}`}
+                                    className="sr-only"
+                                  >
+                                    Quantity
+                                  </label>
                                   <input
                                     type="number"
+                                    id={`edit-qty-${entry.id}`}
+                                    name={`edit-quantity-${entry.id}`}
                                     value={editQuantity}
                                     onChange={(e) =>
                                       setEditQuantity(e.target.value)

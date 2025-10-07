@@ -15,6 +15,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]); // Cart for adding items
+  const idCounterRef = useRef(0);
   const [showValidation, setShowValidation] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
@@ -216,7 +217,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
   const addToCart = (food) => {
     const newItem = {
-      id: Date.now() + Math.random(),
+      id: `${Date.now()}-${idCounterRef.current++}`,
       food: food,
       quantity: "", // Empty quantity - user must enter it
     };
@@ -283,7 +284,10 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
       <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5">
         {/* Food Search */}
         <div className="relative">
-          <label className="block text-xs font-medium text-black mb-1.5">
+          <label
+            htmlFor="food-search"
+            className="block text-xs font-medium text-black mb-1.5"
+          >
             Search Food
           </label>
           <div className="relative">
@@ -291,6 +295,8 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
             <input
               ref={searchRef}
               type="text"
+              id="food-search"
+              name="foodSearch"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -433,8 +439,13 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
+                    <label htmlFor={`qty-${item.id}`} className="sr-only">
+                      Quantity
+                    </label>
                     <input
                       type="number"
+                      id={`qty-${item.id}`}
+                      name={`quantity-${item.id}`}
                       value={item.quantity}
                       placeholder="Qty"
                       onChange={(e) =>

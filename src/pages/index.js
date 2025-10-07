@@ -39,6 +39,20 @@ export default function Home() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
+  const idCounterRef = useRef(0);
+
+  const ensureUniqueEntryIds = (entries) => {
+    const seen = new Set();
+    let counter = 0;
+    return entries.map((e) => {
+      let id = e.id;
+      if (seen.has(id)) {
+        id = `${id}-${counter++}`;
+      }
+      seen.add(id);
+      return { ...e, id };
+    });
+  };
 
   // Refs to columns (for future use if we switch back to measuring)
   const leftColumnRef = useRef(null);
@@ -53,7 +67,13 @@ export default function Home() {
 
     if (savedProfile) setSelectedProfile(savedProfile);
     if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
-    if (savedDailyLog) setDailyLog(JSON.parse(savedDailyLog));
+    if (savedDailyLog) {
+      const parsed = JSON.parse(savedDailyLog);
+      const sanitized = ensureUniqueEntryIds(parsed || []);
+      setDailyLog(sanitized);
+      // persist back sanitized ids
+      localStorage.setItem(`hh-day-log-${today}`, JSON.stringify(sanitized));
+    }
 
     // Show welcome modal for first-time users
     const hasSeenWelcome = localStorage.getItem("hh-welcome-seen");
@@ -78,7 +98,7 @@ export default function Home() {
 
   const addFoodToLog = (food, quantity, mealType) => {
     const newEntry = {
-      id: Date.now(),
+      id: `${Date.now()}-${idCounterRef.current++}`,
       food: food,
       quantity: quantity,
       mealType: mealType,
