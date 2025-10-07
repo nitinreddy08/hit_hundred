@@ -6,6 +6,7 @@ import {
   Globe,
   MessageCircle,
   Clock,
+  Mail,
 } from "lucide-react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
@@ -458,7 +459,7 @@ export default function Home() {
             </div>
 
             {/* Right - Contact */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap justify-center md:justify-end">
               <a
                 href="tel:+917382118118"
                 className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all text-xs"
@@ -466,6 +467,15 @@ export default function Home() {
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">+91 7382118118</span>
+              </a>
+
+              <a
+                href="mailto:nitinreddy.nv@gmail.com"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all text-xs"
+                title="Email"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Email</span>
               </a>
 
               <a

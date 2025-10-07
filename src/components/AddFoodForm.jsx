@@ -1,13 +1,22 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, Plus, Heart, Star, X } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Heart,
+  Star,
+  X,
+  ShoppingCart,
+  Trash2,
+} from "lucide-react";
 import { searchFoods, calculateNutrition } from "../data/foodDB";
 
 const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedFood, setSelectedFood] = useState(null);
-  const [quantity, setQuantity] = useState(""); // Empty until food selected
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [selectedItems, setSelectedItems] = useState([]); // Cart for adding items
+  const [showValidation, setShowValidation] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const placeholderLines = [
     "eg: 🥚 Egg",
@@ -25,44 +34,9 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Get the appropriate unit and default quantity for the selected food
-  const getUnitInfo = () => {
-    if (!selectedFood) return { unit: "g", label: "grams", default: 100 };
+  // Removed unit info since we're always in cart mode
 
-    const unit = selectedFood.defaultUnit || "g";
-
-    if (unit === "ml") {
-      return { unit: "ml", label: "milliliters", default: 250 };
-    } else if (unit === "piece") {
-      // Check if it's a protein powder (should be measured in scoops)
-      const isProteinPowder =
-        selectedFood.name.toLowerCase().includes("protein") &&
-        selectedFood.name.toLowerCase().includes("powder");
-      const label = isProteinPowder ? "scoops" : "pieces";
-      return { unit: "piece", label: label, default: 1 };
-    } else {
-      return { unit: "g", label: "grams", default: 100 };
-    }
-  };
-
-  const unitInfo = getUnitInfo();
-
-  // Auto-detect meal type based on current time
-  const getDefaultMealType = () => {
-    const hour = new Date().getHours();
-
-    if (hour >= 6 && hour < 11) {
-      return "breakfast"; // 6 AM - 11 AM
-    } else if (hour >= 11 && hour < 16) {
-      return "lunch"; // 11 AM - 4 PM
-    } else if (hour >= 16 && hour < 19) {
-      return "snack"; // 4 PM - 7 PM
-    } else {
-      return "dinner"; // 7 PM - 6 AM
-    }
-  };
-
-  const [mealType, setMealType] = useState(getDefaultMealType());
+  const [mealType, setMealType] = useState("breakfast");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
@@ -71,7 +45,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
   // Search foods when query changes
   useEffect(() => {
-    if (searchQuery.length > 0 && !selectedFood) {
+    if (searchQuery.length > 0) {
       const results = searchFoods(searchQuery);
       setSearchResults(results.slice(0, 8)); // Limit to 8 results
       setShowDropdown(true);
@@ -80,7 +54,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
       setSearchResults([]);
       setShowDropdown(false);
     }
-  }, [searchQuery, selectedFood]);
+  }, [searchQuery]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
@@ -113,49 +87,57 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   };
 
   const handleFoodSelect = (food) => {
-    setSelectedFood(food);
-    setSearchQuery(food.name);
-    setShowDropdown(false);
-    setSelectedIndex(-1);
+    // Always add to cart instead of selecting
+    addToCart(food);
+  };
 
-    // Set appropriate default quantity based on food type
-    const unit = food.defaultUnit || "g";
-    if (unit === "ml") {
-      setQuantity(food.defaultQuantity || 250);
-    } else if (unit === "piece") {
-      setQuantity(food.defaultQuantity || 1);
-    } else {
-      setQuantity(food.defaultQuantity || 100);
-    }
+  const addToCart = (food) => {
+    const newItem = {
+      id: Date.now() + Math.random(),
+      food: food,
+      quantity: "", // Empty quantity - user must enter it
+    };
+
+    setSelectedItems((prev) => [...prev, newItem]);
+    setSearchQuery("");
+  };
+
+  const removeFromCart = (itemId) => {
+    setSelectedItems((prev) => prev.filter((item) => item.id !== itemId));
+  };
+
+  const updateCartQuantity = (itemId, newQuantity) => {
+    setSelectedItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      )
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validQuantity =
-      typeof quantity === "number" ? quantity : parseInt(quantity, 10);
-    if (selectedFood && validQuantity > 0) {
-      onAddFood(selectedFood, validQuantity, mealType);
-      setSelectedFood(null);
-      setSearchQuery("");
-      setQuantity(""); // Reset to empty
+    if (selectedItems.length === 0) return;
+
+    // Check for empty quantities
+    const emptyItems = selectedItems.filter(
+      (item) => !item.quantity || item.quantity <= 0
+    );
+
+    if (emptyItems.length > 0) {
+      setShowValidation(true);
+      // Remove validation after 2 seconds
+      setTimeout(() => setShowValidation(false), 2000);
+      return;
     }
+
+    selectedItems.forEach((item) => {
+      onAddFood(item.food, item.quantity, mealType);
+    });
+
+    setSelectedItems([]);
+    setSearchQuery("");
+    setShowValidation(false);
   };
-
-  // Dynamic quick serving sizes based on food type
-  const getQuickServingSizes = () => {
-    if (!selectedFood) return [25, 50, 100, 150, 200];
-
-    const unit = selectedFood.defaultUnit || "g";
-    if (unit === "ml") {
-      return [100, 200, 250, 500]; // ml for liquids
-    } else if (unit === "piece") {
-      return [1, 2, 3, 4]; // pieces for countable items
-    } else {
-      return [25, 50, 100, 150, 200]; // grams for solid foods
-    }
-  };
-
-  const quickServingSizes = getQuickServingSizes();
 
   const mealTypes = [
     { value: "breakfast", label: "Breakfast", emoji: "🍳" },
@@ -198,7 +180,6 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                 type="button"
                 onClick={() => {
                   setSearchQuery("");
-                  setSelectedFood(null);
                   setShowDropdown(false);
                 }}
                 className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
@@ -240,13 +221,24 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                         e.stopPropagation();
                         onToggleFavorite(food);
                       }}
-                      className="p-0.5 hover:bg-gray-200 rounded-full transition-colors"
+                      className="p-0.5 pr-2.5 rounded-full transition-colors "
                     >
                       {isFavorite(food) ? (
-                        <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
+                        <Heart className="w-4 h-4 text-red-500 fill-current" />
                       ) : (
-                        <Heart className="w-3.5 h-3.5 text-gray-400" />
+                        <Heart className="w-4 h-4 text-gray-400" />
                       )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(food);
+                      }}
+                      className="flex items-center space-x-1 px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Add</span>
                     </button>
                   </div>
                 </div>
@@ -255,108 +247,80 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
           )}
         </div>
 
-        {/* Selected Food Display */}
-        {selectedFood && (
-          <div className="bg-blue-50 rounded-xl p-3 border border-blue-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-lg">{selectedFood.emoji}</span>
-                <div>
-                  <div className="font-medium text-black text-sm">
-                    {selectedFood.name}
-                  </div>
-                  <div className="text-xs text-black">
-                    {selectedFood.category} •{" "}
-                    {selectedFood.nutrition.calories.toFixed(1)} cal/g
-                  </div>
-                </div>
-              </div>
+        {/* Selected Items Cart */}
+        {selectedItems.length > 0 && (
+          <div className="bg-green-50 rounded-xl p-3 border border-green-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-green-800 flex items-center">
+                Selected Items ({selectedItems.length})
+              </h3>
               <button
                 type="button"
-                onClick={() => {
-                  setSelectedFood(null);
-                  setQuantity("");
-                }}
-                className="text-gray-400 hover:text-gray-600"
+                onClick={() => setShowClearConfirm(true)}
+                className="text-red-500 hover:text-red-700 text-xs"
               >
-                <X className="w-4 h-4" />
+                Clear All
               </button>
+            </div>
+            <div className="space-y-2">
+              {selectedItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between bg-white rounded-lg p-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">{item.food.emoji}</span>
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-gray-900">
+                        {item.food.name}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {item.food.category}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      placeholder="Qty"
+                      onChange={(e) =>
+                        updateCartQuantity(
+                          item.id,
+                          e.target.value === ""
+                            ? ""
+                            : parseInt(e.target.value) || ""
+                        )
+                      }
+                      min="1"
+                      className={`w-16 px-2 py-1 text-xs border rounded focus:ring-1 focus:ring-blue-500 text-black placeholder-gray-400 transition-all duration-200 ${
+                        showValidation && (!item.quantity || item.quantity <= 0)
+                          ? "border-red-500 bg-red-50 shake"
+                          : "border-gray-300"
+                      }`}
+                    />
+                    <span className="text-xs text-gray-500">
+                      {item.food.defaultUnit === "ml"
+                        ? "ml"
+                        : item.food.defaultUnit === "piece"
+                        ? "U"
+                        : "g"}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFromCart(item.id)}
+                      className="p-1 text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
-        {/* Quantity Input */}
-        <div>
-          <label className="block text-xs font-medium text-black mb-1.5">
-            Quantity{selectedFood && ` (${unitInfo.label})`}
-          </label>
-          <div className="flex items-center space-x-2">
-            <input
-              type="number"
-              value={quantity}
-              placeholder={selectedFood ? "" : "Select a food first"}
-              disabled={!selectedFood}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === "") {
-                  setQuantity("");
-                } else {
-                  const numValue = parseInt(value, 10);
-                  if (!isNaN(numValue) && numValue > 0) {
-                    setQuantity(numValue);
-                  }
-                }
-              }}
-              onBlur={(e) => {
-                if (
-                  selectedFood &&
-                  (e.target.value === "" || quantity === "")
-                ) {
-                  setQuantity(unitInfo.default);
-                }
-              }}
-              min="1"
-              max="10000"
-              className="text-black flex-1 px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed text-sm"
-            />
-            {selectedFood && (
-              <span className="text-black font-medium text-sm">
-                {unitInfo.unit}
-              </span>
-            )}
-          </div>
-
-          {/* Quick Serving Sizes */}
-          {selectedFood && (
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setQuantity("");
-                  document.querySelector('input[type="number"]')?.focus();
-                }}
-                className="px-2.5 py-1 text-xs rounded-lg border border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors font-medium"
-              >
-                Custom
-              </button>
-              {quickServingSizes.map((size) => (
-                <button
-                  key={size}
-                  type="button"
-                  onClick={() => setQuantity(size)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-colors ${
-                    quantity === size
-                      ? "bg-blue-500 text-white border-blue-500"
-                      : "bg-white text-black border-gray-300 hover:bg-gray-50"
-                  }`}
-                >
-                  {size}
-                  {unitInfo.unit}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Quick Serving Sizes - Removed since we're always in cart mode */}
 
         {/* Meal Type Selection */}
         <div>
@@ -387,10 +351,11 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={!selectedFood || quantity <= 0}
+          disabled={selectedItems.length === 0}
           className="w-full py-3 btn-premium text-base disabled:opacity-50 disabled:cursor-not-allowed ripple"
         >
-          Add to {mealTypes.find((m) => m.value === mealType)?.label}
+          Add All to {mealTypes.find((m) => m.value === mealType)?.label} (
+          {selectedItems.length} items)
         </button>
       </form>
 
@@ -414,6 +379,41 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                 </span>
               </button>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Clear All confirmation popup */}
+      {showClearConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setShowClearConfirm(false)}
+          />
+          <div className="relative bg-white rounded-xl shadow-2xl p-4 w-[90%] max-w-sm border border-gray-200">
+            <h3 className="text-sm font-semibold text-gray-900 mb-1">
+              Clear all selected items?
+            </h3>
+            <p className="text-xs text-gray-600 mb-3">
+              This removes all items from the cart.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowClearConfirm(false)}
+                className="px-3 py-1.5 text-xs rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedItems([]);
+                  setShowClearConfirm(false);
+                }}
+                className="px-3 py-1.5 text-xs rounded-lg bg-red-600 text-white hover:bg-red-700"
+              >
+                Clear All
+              </button>
+            </div>
           </div>
         </div>
       )}

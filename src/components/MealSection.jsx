@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Edit2, Trash2, Plus, Minus } from "lucide-react";
+import { Edit2, Trash2, Plus, Minus, Check } from "lucide-react";
 import { calculateNutrition } from "../data/foodDB";
 
 const MealSection = ({ meal, entries, onUpdateQuantity, onRemoveFood }) => {
   const [editingId, setEditingId] = useState(null);
   const [editQuantity, setEditQuantity] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const startEditing = (entry) => {
     setEditingId(entry.id);
@@ -69,14 +70,7 @@ const MealSection = ({ meal, entries, onUpdateQuantity, onRemoveFood }) => {
                 <div className="flex items-center space-x-1.5">
                   {/* Quantity Controls */}
                   <div className="flex items-center space-x-0.5">
-                    <button
-                      onClick={() =>
-                        adjustQuantity(entry.id, entry.quantity, -10)
-                      }
-                      className="p-0.5 hover:bg-gray-200 rounded-full transition-colors"
-                    >
-                      <Minus className="w-3.5 h-3.5 text-gray-600" />
-                    </button>
+                    {/* Removed +/- quick adjust buttons per request */}
 
                     {isEditing ? (
                       <div className="flex items-center space-x-0.5">
@@ -88,24 +82,25 @@ const MealSection = ({ meal, entries, onUpdateQuantity, onRemoveFood }) => {
                             if (e.key === "Enter") saveEdit(entry.id);
                             if (e.key === "Escape") cancelEdit();
                           }}
-                          className="w-14 px-1.5 py-0.5 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          onBlur={() => saveEdit(entry.id)}
+                          className="w-14 px-1.5 py-0.5 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium text-black"
                           autoFocus
                         />
                         <button
-                          onClick={() => saveEdit(entry.id)}
+                          onMouseDown={() => saveEdit(entry.id)}
                           className="p-0.5 text-green-600 hover:bg-green-100 rounded-full transition-colors"
                         >
-                          <Plus className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={cancelEdit}
-                          className="p-0.5 text-red-600 hover:bg-red-100 rounded-full transition-colors"
-                        >
-                          <Minus className="w-3.5 h-3.5" />
+                          <Check className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     ) : (
                       <div className="flex items-center space-x-0.5">
+                        <button
+                          onClick={() => startEditing(entry)}
+                          className="p-0.5 hover:bg-gray-200 rounded-full transition-colors"
+                        >
+                          <Edit2 className="w-3.5 h-3.5 text-gray-600" />
+                        </button>
                         <span className="text-xs font-medium text-gray-700 min-w-[2.5rem] text-center">
                           {entry.quantity}
                           {entry.food.defaultUnit === "ml"
@@ -114,29 +109,21 @@ const MealSection = ({ meal, entries, onUpdateQuantity, onRemoveFood }) => {
                             ? "U"
                             : "g"}
                         </span>
-                        <button
-                          onClick={() => startEditing(entry)}
-                          className="p-0.5 hover:bg-gray-200 rounded-full transition-colors"
-                        >
-                          <Edit2 className="w-3.5 h-3.5 text-gray-600" />
-                        </button>
                       </div>
                     )}
 
-                    <button
-                      onClick={() =>
-                        adjustQuantity(entry.id, entry.quantity, 10)
-                      }
-                      className="p-0.5 hover:bg-gray-200 rounded-full transition-colors"
-                    >
-                      <Plus className="w-3.5 h-3.5 text-gray-600" />
-                    </button>
+                    {/* Removed + increase button to match requested UI */}
                   </div>
 
                   {/* Delete Button */}
                   <button
-                    onClick={() => onRemoveFood(entry.id)}
-                    className="p-0.5 text-red-600 hover:bg-red-100 rounded-full transition-colors"
+                    onClick={() => setPendingDeleteId(entry.id)}
+                    disabled={isEditing}
+                    className={`p-0.5 rounded-full transition-colors ${
+                      isEditing
+                        ? "text-red-400 opacity-50 pointer-events-none"
+                        : "text-red-600 hover:bg-red-100"
+                    }`}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -146,6 +133,41 @@ const MealSection = ({ meal, entries, onUpdateQuantity, onRemoveFood }) => {
           );
         })}
       </div>
+      {/* Delete confirmation popup */}
+      {pendingDeleteId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setPendingDeleteId(null)}
+          />
+          <div className="relative bg-white rounded-xl shadow-2xl p-4 w-[90%] max-w-sm border border-gray-200">
+            <h3 className="text-sm font-semibold text-gray-900 mb-1">
+              Delete item?
+            </h3>
+            <p className="text-xs text-gray-600 mb-3">
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setPendingDeleteId(null)}
+                className="px-3 py-1.5 text-xs rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  const id = pendingDeleteId;
+                  setPendingDeleteId(null);
+                  onRemoveFood(id);
+                }}
+                className="px-3 py-1.5 text-xs rounded-lg bg-red-600 text-white hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
