@@ -297,6 +297,15 @@ const ProfileSelector = ({
                             g,
                           </span>
                         </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-800">Creatine:</span>
+                          <span className="font-medium text-gray-800">
+                            {typeof profile.fats.creatine === "object"
+                              ? `${profile.fats.creatine.min}–${profile.fats.creatine.max}`
+                              : profile.fats.creatine}{" "}
+                            g,
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>

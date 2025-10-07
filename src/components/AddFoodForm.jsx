@@ -46,6 +46,7 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
 
   const [mealType, setMealType] = useState(getDefaultMealType);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [suggestionsPinned, setSuggestionsPinned] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const searchRef = useRef(null);
@@ -136,7 +137,10 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
       setSelectedIndex(-1);
     } else {
       // If empty query, show curated suggestions by meal type when focused
-      if (document.activeElement === searchRef.current) {
+      if (
+        document.activeElement === searchRef.current &&
+        (selectedItems.length === 0 || suggestionsPinned)
+      ) {
         const suggestions = getMealSuggestions(mealType);
         setSearchResults(suggestions);
         setShowDropdown(true);
@@ -152,7 +156,8 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
   useEffect(() => {
     if (
       searchQuery.length === 0 &&
-      document.activeElement === searchRef.current
+      document.activeElement === searchRef.current &&
+      (selectedItems.length === 0 || suggestionsPinned)
     ) {
       const suggestions = getMealSuggestions(mealType);
       setSearchResults(suggestions);
@@ -160,6 +165,19 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
       setSelectedIndex(-1);
     }
   }, [mealType]);
+
+  // If items exist in cart and query is empty, hide suggestions and dropdown
+  useEffect(() => {
+    if (
+      selectedItems.length > 0 &&
+      searchQuery.length === 0 &&
+      !suggestionsPinned
+    ) {
+      setSearchResults([]);
+      setShowDropdown(false);
+      setSelectedIndex(-1);
+    }
+  }, [selectedItems, searchQuery, suggestionsPinned]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
@@ -277,11 +295,15 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               onFocus={() => {
-                if (searchQuery.length === 0) {
+                if (
+                  searchQuery.length === 0 &&
+                  (selectedItems.length === 0 || suggestionsPinned)
+                ) {
                   const suggestions = getMealSuggestions(mealType);
                   setSearchResults(suggestions);
                   setShowDropdown(true);
                   setSelectedIndex(-1);
+                  setSuggestionsPinned(true);
                 } else {
                   setShowDropdown(true);
                 }
@@ -309,11 +331,23 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
               ref={dropdownRef}
               className="absolute z-10 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg max-h-52 overflow-y-auto"
             >
-              {searchQuery.length === 0 && (
-                <div className="px-2.5 py-1 text-[10px] text-gray-700 bg-gray-50 border-b border-gray-200 sticky top-0">
-                  Suggestions
-                </div>
-              )}
+              {searchQuery.length === 0 &&
+                (selectedItems.length === 0 || suggestionsPinned) && (
+                  <div className="px-2.5 py-1 flex items-center justify-between text-[10px] text-gray-700 bg-gray-50 border-b border-gray-200 sticky top-0">
+                    <span>Suggestions</span>
+                    <button
+                      type="button"
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={() => {
+                        setSuggestionsPinned(false);
+                        setShowDropdown(false);
+                        setSelectedIndex(-1);
+                      }}
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
               {searchResults.map((food, index) => (
                 <div
                   key={food.name}

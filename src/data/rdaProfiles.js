@@ -30,6 +30,7 @@ export const rdaProfiles = {
     },
     fats: {
       omega3: { min: 2, max: 3 }, // g
+      creatine: { min: 3, max: 5 }, // g (maintenance range)
     },
   },
   FEMALE_ADULT: {
@@ -60,6 +61,7 @@ export const rdaProfiles = {
     },
     fats: {
       omega3: { min: 2, max: 3 }, // g
+      creatine: { min: 3, max: 5 }, // g (maintenance range)
     },
   },
 };

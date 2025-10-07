@@ -182,7 +182,10 @@ const ProgressGrid = ({ dailyLog, profile }) => {
       key: "fats",
       title: "Essential Fats",
       icon: "🐟",
-      nutrients: [{ key: "omega3", label: "Omega-3", unit: "g", icon: "🐟" }],
+      nutrients: [
+        { key: "omega3", label: "Omega-3", unit: "g", icon: "🐟" },
+        { key: "creatine", label: "Creatine", unit: "g", icon: "⚡" },
+      ],
     },
   ];
 
