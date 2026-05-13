@@ -7,6 +7,10 @@ import {
   MessageCircle,
   Clock,
   Mail,
+  Flame,
+  Beef,
+  Wheat,
+  Droplets,
 } from "lucide-react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";

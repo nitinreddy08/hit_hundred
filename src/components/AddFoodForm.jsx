@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+﻿import { useState, useRef, useEffect } from "react";
 import {
   Search,
   Plus,
@@ -25,7 +25,9 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
     "eg: 🥣 Oats",
     "eg: 🥛 Milk",
     "eg: 🍌 Banana",
-    "eg: 🧀 Paneer",
+    "eg: 🐟 Seer Fish",
+    "eg: 🌾 Foxtail Millet",
+    "eg: 🫘 Horse Gram",
   ];
 
   useEffect(() => {
@@ -45,7 +47,11 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
     return "dinner"; // 19:00 - 23:59
   };
 
-  const [mealType, setMealType] = useState(getDefaultMealType);
+  const [mealType, setMealType] = useState("breakfast");
+  useEffect(() => {
+    // Keep initial SSR/CSR markup deterministic, then set time-based default on client.
+    setMealType(getDefaultMealType());
+  }, []);
   const [showDropdown, setShowDropdown] = useState(false);
   const [suggestionsPinned, setSuggestionsPinned] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -77,39 +83,55 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
       "Greek Yogurt (Plain)",
       "Banana (Medium)",
       "Whole Milk",
-      "Paneer (Indian Cottage Cheese)",
-      "Almonds",
+      "Indian Cottage Cheese",
+      "Almonds (Raw)",
       "Brown Rice (Cooked)",
+      "Whey Protein Powder",
+      "Chia Seeds",
+      "Flaxseeds (Ground)",
+      "Turmeric Milk",
     ],
     lunch: [
       "Chicken Breast (Grilled)",
-      "Brown Rice (Cooked)",
-      "Dal (Mixed Lentils)",
-      "Chapati/Roti (Whole Wheat)",
+      "Red Rice (Cooked)",
+      "Split Pigeon Pea Lentil (Cooked)",
+      "Whole Wheat Flatbread",
       "Spinach (Cooked)",
-      "Curd (Dahi)",
-      "Salmon (Cooked)",
-      "Kidney Beans (Rajma)",
+      "Plain Yogurt (Indian Curd)",
+      "Seer Fish (Grilled)",
+      "Horse Gram (Cooked)",
+      "Drumstick (Moringa, Cooked)",
+      "Foxtail Millet (Cooked)",
+      "Country Chicken (Cooked)",
+      "Lentil Vegetable Soup",
     ],
     dinner: [
       "Chicken Breast (Grilled)",
-      "Salmon (Cooked)",
+      "Tilapia (Grilled)",
       "Quinoa (Cooked)",
       "Broccoli (Cooked)",
-      "Paneer (Indian Cottage Cheese)",
-      "Ragi Roti (Finger Millet)",
+      "Indian Cottage Cheese (Low-Fat)",
+      "Finger Millet Flatbread",
       "Tofu (Firm)",
-      "Moong Dal (Cooked)",
+      "Green Gram Lentil (Cooked)",
+      "Moringa Leaves (Cooked)",
+      "Bitter Gourd (Cooked)",
+      "Barnyard Millet (Cooked)",
+      "Black Gram Lentil (Cooked)",
     ],
     snack: [
       "Protein Bar (Generic)",
-      "Walnuts",
+      "Walnuts (Raw)",
       "Dates (Seedless)",
       "Peanut Butter",
       "Cottage Cheese (Low-Fat)",
-      "Popcorn (Air-Popped)",
-      "Hummus",
+      "Roasted Bengal Gram",
+      "Fox Nuts (Roasted)",
       "Apple (Medium)",
+      "Pumpkin Seeds (Raw)",
+      "Almonds (Raw)",
+      "Coconut Water",
+      "Indian Gooseberry",
     ],
   };
 
@@ -354,7 +376,13 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                     </button>
                   </div>
                 )}
-              {searchResults.map((food, index) => (
+              {searchResults.map((food, index) => {
+                // Show nutrition per 100g (or per piece if piece unit)
+                const previewQty = food.defaultUnit === "piece" ? 1 : 100;
+                const previewNutrition = calculateNutrition(food, previewQty);
+                const previewLabel = food.defaultUnit === "piece" ? "per piece" : "per 100g";
+
+                return (
                 <div
                   key={food.name}
                   className={`flex items-center justify-between p-2.5 hover:bg-gray-50 cursor-pointer ${
@@ -364,16 +392,26 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                   }`}
                   onClick={() => handleFoodSelect(food)}
                 >
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg">{food.emoji}</span>
-                    <div>
-                      <div className="font-medium text-black text-sm">
+                  <div className="flex items-center space-x-2 min-w-0 flex-1">
+                    <span className="text-lg flex-shrink-0">{food.emoji}</span>
+                    <div className="min-w-0">
+                      <div className="font-medium text-black text-sm truncate">
                         {food.name}
                       </div>
-                      <div className="text-xs text-black">{food.category}</div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[10px] text-orange-600 font-semibold">
+                          {previewNutrition.calories?.toFixed(0)} kcal
+                        </span>
+                        <span className="text-[10px] text-blue-600 font-semibold">
+                          {previewNutrition.protein?.toFixed(1)}g protein
+                        </span>
+                        <span className="text-[10px] text-gray-400">
+                          {previewLabel}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center space-x-1 flex-shrink-0 ml-2">
                     <button
                       type="button"
                       onClick={(e) => {
@@ -401,7 +439,8 @@ const AddFoodForm = ({ onAddFood, favorites, onToggleFavorite }) => {
                     </button>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
